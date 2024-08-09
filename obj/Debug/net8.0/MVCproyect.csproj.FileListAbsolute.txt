@@ -28,3 +28,4 @@ C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Imp
 C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\obj\Debug\net8.0\MVCproyect.pdb
 C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\obj\Debug\net8.0\MVCproyect.genruntimeconfig.cache
 C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\obj\Debug\net8.0\ref\MVCproyect.dll
+C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\obj\Debug\net8.0\MVCproyect.sourcelink.json
