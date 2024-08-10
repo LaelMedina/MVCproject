@@ -4,7 +4,6 @@ namespace MVCproyect.Models
 {
     public class Product
     {
-        public int Id { get; set; }
 
         [Required(ErrorMessage = "The Product's name is required")]
         public string Name { get; set; } = string.Empty;

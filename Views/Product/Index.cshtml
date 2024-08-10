@@ -1,0 +1,36 @@
+﻿@{
+    var products = ViewData["Products"] as List<MVCproyect.Models.Product>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products List</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+
+
+        <header class="text-center mb-4">
+            <h1>List of Products</h1>
+        </header>
+
+        <div class="row bg-light p-3 border-bottom font-weight-bold">
+            <div class="col-sm-4">Name</div>
+            <div class="col-sm-4">Description</div>
+            <div class="col-sm-4">Price</div>
+        </div>
+
+        @foreach (var product in products)
+        {
+            <div class="row p-3 border-bottom">
+                <div class="col-sm-4">@product.Name</div>
+                <div class="col-sm-4">@product.Description</div>
+                <div class="col-sm-4">@product.Price</div>
+            </div>
+        }
+
+    </div>
+</body>
+</html>
