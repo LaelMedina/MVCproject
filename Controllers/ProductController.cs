@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using MVCproyect.Models;
 
 namespace MVCproyect.Controllers
 {
     public class ProductController : Controller
     {
+        private SqlConnection _context = new SqlConnection();
+
         private readonly List<Product> _products = new List<Product>
         {
             new Product
