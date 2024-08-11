@@ -11,21 +11,21 @@ namespace MVCproyect.Controllers
             {
                 Name = "Anti Reflection Glasses",
                 Description = "Built with the exact material you need to avoid blue light dangerous effects on your eyes",
-                Price = 299.9
+                Price = 99.9
             },
 
             new Product
             {
                 Name = "Mic Setup",
                 Description = "A mic setup with all the tools you need to start a podcast",
-                Price = 999.9
+                Price = 199.9
             },
 
             new Product 
             {
                 Name = "Camera Setup",
                 Description = "All the visual tools you need to start a podcast",
-                Price = 2999.9
+                Price = 499.9
             }
         };
 
