@@ -14,7 +14,7 @@ namespace MVCproyect.Models
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public IDbConnection CreateConnection() 
+        public SqlConnection CreateConnection() 
         {
             return new SqlConnection(_connectionString);
         }

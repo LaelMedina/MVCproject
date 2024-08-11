@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MathNet.Numerics;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCproyect.Models
 {
     public class Product
     {
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "The Product's name is required")]
         public string Name { get; set; } = string.Empty;
@@ -12,7 +14,9 @@ namespace MVCproyect.Models
         public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "The Product's price is required")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
+
+        public DateTime CreatedAt { get; set; }
 
     }
 }

@@ -1,3 +1,6 @@
+using MathNet.Numerics;
+using MVCproyect.Models;
+
 namespace MVCproyect
 {
     public class Program
@@ -8,6 +11,9 @@ namespace MVCproyect
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Registrar AppDbContext
+            builder.Services.AddSingleton<AppDbContext>();
 
             var app = builder.Build();
 

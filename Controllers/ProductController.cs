@@ -1,40 +1,59 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using MVCproyect.Models;
+using System.Data;
 
 namespace MVCproyect.Controllers
 {
     public class ProductController : Controller
     {
 
-        private readonly AppDbContext? _context;
+        private readonly AppDbContext _context;
 
-        private readonly List<Product> _products = new List<Product>
+        private readonly List<Product> _products;
+
+        public ProductController(AppDbContext context)
         {
-            new Product
-            {
-                Name = "Anti Reflection Glasses",
-                Description = "Built with the exact material you need to avoid blue light dangerous effects on your eyes",
-                Price = 99.9
-            },
+            _context = context;
+            _products = new List<Product>();
+        }
 
-            new Product
+        public IActionResult Index()
+        {
+            try
             {
-                Name = "Mic Setup",
-                Description = "A mic setup with all the tools you need to start a podcast",
-                Price = 199.9
-            },
+                SqlConnection connection = _context.CreateConnection();
 
-            new Product 
-            {
-                Name = "Camera Setup",
-                Description = "All the visual tools you need to start a podcast",
-                Price = 499.9
+                connection.Open();
+
+                String query = "SELECT * FROM products";
+
+                using SqlCommand command = new SqlCommand(query, connection);
+
+                using SqlDataReader reader = command.ExecuteReader();
+
+                Console.WriteLine("Before the while loop");
+
+                while (reader.Read())
+                {
+                    Product product = new Product
+                    {
+                        Id = reader.GetInt32("id"),
+                        Name = reader.GetString("name"),
+                        Description = reader.GetString("description"),
+                        Price = reader.GetDecimal("price"),
+                        CreatedAt = reader.GetDateTime("created_at")
+
+                    };
+                    _products.Add(product);
+                    Console.WriteLine($"Added product: {product.Name}");
+                }
             }
-        };
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
 
-
-        public IActionResult Index() 
-        {
             ViewData["Products"] = _products;
             return View();
         }
@@ -45,6 +64,6 @@ namespace MVCproyect.Controllers
 
         public void Update() { }
 
-        public void Delete(){ }
+        public void Delete() { }
     }
 }

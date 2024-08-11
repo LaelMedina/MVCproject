@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "V7NgybfXmvAEkMWK6WkmJ1kWnu/ccL4msM0/OFPfa/dIDFKjcut4uwbsGHXJO+gi+v1AyvVfSXZ1n6ObhuYTcg==",
+  "dgSpecHash": "VK52lsPSN8sjae6hnZEubgAts8h7h4fGNTLxHlIXBHeUBzDFvh0kse+NJTic3fkZdRlw68kpQmB+MRLkG//H7A==",
   "success": true,
   "projectFilePath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\University\\Patrones de diseño\\Semana 2\\Implementacion MVC\\MVCproyect\\MVCproyect.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.identity\\1.11.3\\azure.identity.1.11.3.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.data.sqlclient\\5.2.1\\microsoft.data.sqlclient.5.2.1.nupkg.sha512",
