@@ -107,6 +107,50 @@ namespace MVCproyect.Controllers
 
         public void Update() { }
 
-        public void Delete() { }
+        public IActionResult Delete(int id)
+        {
+            SqlConnection connection = _context.CreateConnection();
+
+            connection.Open();
+
+            string query = "DELETE FROM products WHERE id=@id";
+
+            using SqlCommand command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            try
+            {
+                using SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read()) 
+                {
+                    Product deletedProduct = new Product
+                    {
+                        Id = reader.GetInt32("id"),
+                        Name = reader.GetString("name"),
+                        Description = reader.GetString("description"),
+                        Price = reader.GetDecimal("price"),
+                        CreatedAt = reader.GetDateTime("created_at")
+                    };
+
+                    ViewData["product"] = deletedProduct;
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message.ToString());
+            }
+            finally 
+            {
+                if (connection != null && connection.State == ConnectionState.Open) 
+                {
+                    connection.Close();
+                }
+            }
+
+            return View("Product");
+
+        }
     }
 }
