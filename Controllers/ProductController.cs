@@ -32,8 +32,6 @@ namespace MVCproyect.Controllers
 
                 using SqlDataReader reader = command.ExecuteReader();
 
-                Console.WriteLine("Before the while loop");
-
                 while (reader.Read())
                 {
                     Product product = new Product
@@ -46,7 +44,6 @@ namespace MVCproyect.Controllers
 
                     };
                     _products.Add(product);
-                    Console.WriteLine($"Added product: {product.Name}");
                 }
             }
             catch (Exception ex)
@@ -60,7 +57,53 @@ namespace MVCproyect.Controllers
 
         public void Create() { }
 
-        public void Read() { }
+        public IActionResult getProductById(int id)
+        {
+
+            SqlConnection connection = _context.CreateConnection();
+
+            connection.Open();
+
+            try
+            {
+                string query = $"SELECT * FROM products WHERE id=@id";
+
+                using SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@id", id);
+
+                using SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    Product product = new Product
+                    {
+                        Id = reader.GetInt32("id"),
+                        Name = reader.GetString("name"),
+                        Description = reader.GetString("description"),
+                        Price = reader.GetDecimal("price"),
+                        CreatedAt = reader.GetDateTime("created_at")
+                    };
+
+                    ViewData["product"] = product;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+
+            }
+            return View("Product");
+        }
 
         public void Update() { }
 

@@ -12,7 +12,7 @@ namespace MVCproyect
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // Registrar AppDbContext
+            // Register AppDbContext
             builder.Services.AddSingleton<AppDbContext>();
 
             var app = builder.Build();
