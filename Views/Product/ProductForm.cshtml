@@ -1,0 +1,34 @@
+﻿@model MVCproyect.Models.Product;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products List</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+
+
+        <header class="text-center mb-4">
+            <h1>Product Form</h1>
+        </header>
+
+        <form asp-action="Create" method="post">
+            <label asp-for="Name"></label>
+            <input type="Name" />
+
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description"></textarea>
+
+            <label asp-for="Price"></label>
+            <input type="number" asp-for="Price"/>
+
+            <button type="submit">Create</button>
+        </form>
+
+        <a href="@Url.Action("Index")">Back to List</a>
+
+    </div>
+</body>
+</html>

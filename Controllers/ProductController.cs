@@ -55,7 +55,10 @@ namespace MVCproyect.Controllers
             return View();
         }
 
-        public void Create() { }
+        public IActionResult Create() 
+        {     
+            return View("ProductForm");
+        }
 
         public IActionResult getProductById(int id)
         {
@@ -94,18 +97,14 @@ namespace MVCproyect.Controllers
             {
                 Console.WriteLine(ex.Message.ToString());
             }
-            finally
-            {
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
 
-            }
             return View("Product");
         }
 
-        public void Update() { }
+        public IActionResult Update() 
+        {
+            return View("ProductForm");
+        }
 
         public IActionResult Delete(int id)
         {
@@ -140,13 +139,6 @@ namespace MVCproyect.Controllers
             catch(Exception e)
             {
                 Console.WriteLine(e.Message.ToString());
-            }
-            finally 
-            {
-                if (connection != null && connection.State == ConnectionState.Open) 
-                {
-                    connection.Close();
-                }
             }
 
             return View("Product");
