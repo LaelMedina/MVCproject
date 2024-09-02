@@ -89,3 +89,4 @@ C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Imp
 C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\bin\Debug\net8.0\runtimes\win-x64\native\krb5_64.dll
 C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\bin\Debug\net8.0\runtimes\win-x64\native\krbcc64.dll
 C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
+C:\Users\Usuario\OneDrive\Documentos\University\Patrones de diseño\Semana 2\Implementacion MVC\MVCproyect\bin\Debug\net8.0\NuGet.Frameworks.dll

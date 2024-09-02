@@ -65,6 +65,10 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "NuGet.Frameworks": {
+              "target": "Package",
+              "version": "[6.11.0, )"
+            },
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.8.6, )"

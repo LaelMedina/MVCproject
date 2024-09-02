@@ -1,22 +1,23 @@
 ﻿using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System.Data;
 
 namespace MVCproyect.Models
 {
-    public class AppDbContext
+    public class MySqlService
     {
 
         private readonly string? _connectionString;
 
-        public AppDbContext(IConfiguration configuration)
+        public MySqlService(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public SqlConnection CreateConnection() 
+        public MySqlConnection CreateConnection() 
         {
-            return new SqlConnection(_connectionString);
+            return new MySqlConnection(_connectionString);
         }
-
+        
     }
 }

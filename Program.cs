@@ -13,7 +13,7 @@ namespace MVCproyect
             builder.Services.AddControllersWithViews();
 
             // Register AppDbContext
-            builder.Services.AddSingleton<AppDbContext>();
+            builder.Services.AddSingleton<MySqlService>();
 
             var app = builder.Build();
 

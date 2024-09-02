@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;  // Asegúrate de usar el paquete correcto para MySQL
 using MVCproyect.Models;
 using System.Data;
 
@@ -7,12 +7,10 @@ namespace MVCproyect.Controllers
 {
     public class ProductController : Controller
     {
-
-        private readonly AppDbContext _context;
-
+        private readonly MySqlService _context;
         private readonly List<Product> _products;
 
-        public ProductController(AppDbContext context)
+        public ProductController(MySqlService context)
         {
             _context = context;
             _products = new List<Product>();
@@ -22,15 +20,14 @@ namespace MVCproyect.Controllers
         {
             try
             {
-                SqlConnection connection = _context.CreateConnection();
-
+                using MySqlConnection connection = _context.CreateConnection();  // Utiliza MySqlConnection
                 connection.Open();
 
-                String query = "SELECT * FROM products";
+                string query = "SELECT * FROM products";
 
-                using SqlCommand command = new SqlCommand(query, connection);
+                using MySqlCommand command = new MySqlCommand(query, connection);  // Utiliza MySqlCommand
 
-                using SqlDataReader reader = command.ExecuteReader();
+                using MySqlDataReader reader = command.ExecuteReader();  // Utiliza MySqlDataReader
 
                 while (reader.Read())
                 {
@@ -40,8 +37,7 @@ namespace MVCproyect.Controllers
                         Name = reader.GetString("name"),
                         Description = reader.GetString("description"),
                         Price = reader.GetDecimal("price"),
-                        CreatedAt = reader.GetDateTime("created_at")
-
+                        CreatedAt = reader.GetDateTime("CreatedAt")
                     };
                     _products.Add(product);
                 }
@@ -55,27 +51,24 @@ namespace MVCproyect.Controllers
             return View();
         }
 
-        public IActionResult Create() 
-        {     
+        public IActionResult Create()
+        {
             return View("ProductForm");
         }
 
-        public IActionResult getProductById(int id)
+        public IActionResult GetProductById(int id)
         {
-
-            SqlConnection connection = _context.CreateConnection();
-
+            using MySqlConnection connection = _context.CreateConnection();
             connection.Open();
 
             try
             {
-                string query = $"SELECT * FROM products WHERE id=@id";
+                string query = "SELECT * FROM products WHERE id=@id";
 
-                using SqlCommand command = new SqlCommand(query, connection);
-
+                using MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@id", id);
 
-                using SqlDataReader reader = command.ExecuteReader();
+                using MySqlDataReader reader = command.ExecuteReader();
 
                 if (reader.Read())
                 {
@@ -85,13 +78,11 @@ namespace MVCproyect.Controllers
                         Name = reader.GetString("name"),
                         Description = reader.GetString("description"),
                         Price = reader.GetDecimal("price"),
-                        CreatedAt = reader.GetDateTime("created_at")
+                        CreatedAt = reader.GetDateTime("CreatedAt")
                     };
 
                     ViewData["product"] = product;
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -101,48 +92,31 @@ namespace MVCproyect.Controllers
             return View("Product");
         }
 
-        public IActionResult Update() 
+        public IActionResult Update()
         {
             return View("ProductForm");
         }
 
         public IActionResult Delete(int id)
         {
-            SqlConnection connection = _context.CreateConnection();
-
+            using MySqlConnection connection = _context.CreateConnection();
             connection.Open();
 
             string query = "DELETE FROM products WHERE id=@id";
 
-            using SqlCommand command = new SqlCommand(query, connection);
-
+            using MySqlCommand command = new MySqlCommand(query, connection);
             command.Parameters.AddWithValue("@id", id);
 
             try
             {
-                using SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read()) 
-                {
-                    Product deletedProduct = new Product
-                    {
-                        Id = reader.GetInt32("id"),
-                        Name = reader.GetString("name"),
-                        Description = reader.GetString("description"),
-                        Price = reader.GetDecimal("price"),
-                        CreatedAt = reader.GetDateTime("created_at")
-                    };
-
-                    ViewData["product"] = deletedProduct;
-                }
+                command.ExecuteNonQuery();  // Solo ejecuta la consulta; no hay necesidad de usar un DataReader para DELETE
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message.ToString());
             }
 
-            return View("Product");
-
+            return RedirectToAction("Index");  // Redirige después de la eliminación en lugar de intentar mostrar el producto eliminado
         }
     }
 }
