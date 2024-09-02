@@ -16,6 +16,9 @@ namespace MVCproyect.Models
         [Required(ErrorMessage = "The Product's price is required")]
         public decimal Price { get; set; }
 
+        [Required(ErrorMessage = "The amount of units of the product must be specified")]
+        public int Stock { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
     }

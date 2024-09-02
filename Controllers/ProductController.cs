@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;  // Asegúrate de usar el paquete correcto para MySQL
+using MySql.Data.MySqlClient;  
 using MVCproyect.Models;
 using System.Data;
 
@@ -20,14 +20,14 @@ namespace MVCproyect.Controllers
         {
             try
             {
-                using MySqlConnection connection = _context.CreateConnection();  // Utiliza MySqlConnection
+                using MySqlConnection connection = _context.CreateConnection();  
                 connection.Open();
 
                 string query = "SELECT * FROM products";
 
-                using MySqlCommand command = new MySqlCommand(query, connection);  // Utiliza MySqlCommand
+                using MySqlCommand command = new MySqlCommand(query, connection); 
 
-                using MySqlDataReader reader = command.ExecuteReader();  // Utiliza MySqlDataReader
+                using MySqlDataReader reader = command.ExecuteReader();  
 
                 while (reader.Read())
                 {
@@ -37,6 +37,7 @@ namespace MVCproyect.Controllers
                         Name = reader.GetString("name"),
                         Description = reader.GetString("description"),
                         Price = reader.GetDecimal("price"),
+                        Stock = reader.GetInt32("stock"),
                         CreatedAt = reader.GetDateTime("CreatedAt")
                     };
                     _products.Add(product);
@@ -78,6 +79,7 @@ namespace MVCproyect.Controllers
                         Name = reader.GetString("name"),
                         Description = reader.GetString("description"),
                         Price = reader.GetDecimal("price"),
+                        Stock = reader.GetInt32("stock"),
                         CreatedAt = reader.GetDateTime("CreatedAt")
                     };
 
@@ -109,14 +111,14 @@ namespace MVCproyect.Controllers
 
             try
             {
-                command.ExecuteNonQuery();  // Solo ejecuta la consulta; no hay necesidad de usar un DataReader para DELETE
+                command.ExecuteNonQuery(); 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message.ToString());
             }
 
-            return RedirectToAction("Index");  // Redirige después de la eliminación en lugar de intentar mostrar el producto eliminado
+            return RedirectToAction("Index"); 
         }
     }
 }

@@ -16,11 +16,14 @@
 
         <form asp-action="Create" method="post">
             <label asp-for="Name"></label>
-            <input type="Name" />
+            <input type="text" asp-for="Name" />
 
             <label asp-for="Description"></label>
             <textarea asp-for="Description"></textarea>
 
+            <label asp-for="Stock"></label>
+            <input type="number" asp-for="Stock"/>
+            
             <label asp-for="Price"></label>
             <input type="number" asp-for="Price"/>
 
