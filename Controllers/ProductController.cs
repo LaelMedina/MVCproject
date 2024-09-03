@@ -99,6 +99,7 @@ namespace MVCproyect.Controllers
             return View("ProductForm");
         }
 
+        [HttpPost]
         public IActionResult Delete(int id)
         {
             using MySqlConnection connection = _context.CreateConnection();
