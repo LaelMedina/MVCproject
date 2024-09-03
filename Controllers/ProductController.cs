@@ -94,7 +94,7 @@ namespace MVCproyect.Controllers
             return View("Product");
         }
 
-        public IActionResult Update()
+        public IActionResult Update(int id)
         {
             return View("ProductForm");
         }

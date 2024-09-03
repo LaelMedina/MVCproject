@@ -41,7 +41,11 @@
                         <input type="hidden" name="id" value="@product.Id" />
                         <button type="submit" class="btn btn-danger  btn-sm">Delete</button>
                     </form>
-                    <button class="btn btn-primary btn-sm">Edit</button>
+
+                    <form asp-action="Update" method="post" style="display:inline">
+                        <input type="hidden" name="id" value="@product.Id" />
+                        <button class="btn btn-primary btn-sm">Edit</button>
+                    </form>
                 </div>
 
             </div>
