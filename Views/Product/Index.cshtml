@@ -17,23 +17,30 @@
         </header>
 
         <div class="row bg-light p-3 border-bottom font-weight-bold">
-            <div class="col-sm-2">Id</div>
+            <div class="col-sm-1">Id</div>
             <div class="col-sm-2">Name</div>
             <div class="col-sm-2">Description</div>
             <div class="col-sm-2">Price</div>
-            <div class="col-sm-2">Stock</div>
+            <div class="col-sm-1">Stock</div>
             <div class="col-sm-2">Created At</div>
+            <div class="col-sm-2">Action</div>
         </div>
 
         @foreach (var product in products)
         {
             <div class="row p-3 border-bottom">
-                <div class="col-sm-2">@product.Id</div>
+                <div class="col-sm-1">@product.Id</div>
                 <div class="col-sm-2">@product.Name</div>
                 <div class="col-sm-2">@product.Description</div>
                 <div class="col-sm-2">@product.Price$</div>
-                <div class="col-sm-2">@product.Stock</div>
+                <div class="col-sm-1">@product.Stock</div>
                 <div class="col-sm-2">@product.CreatedAt</div>
+
+                <div class="col-sm-2">
+                    <button class="btn btn-danger  btn-sm">Delete</button>
+                    <button class="btn btn-primary btn-sm">Edit</button>
+                </div>
+
             </div>
         }
 
