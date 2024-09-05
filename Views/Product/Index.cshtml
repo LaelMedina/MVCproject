@@ -17,9 +17,7 @@
         </header>
 
         <div>
-            <form asp-action="Create" method="post">
-                <button class="btn btn-primary">Create New</button>
-            </form>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
         </div>
 
         <div class="row bg-light p-3 border-bottom font-weight-bold">
@@ -45,7 +43,7 @@
                 <div class="col-sm-2">
                     <form asp-action="Delete" method="post" style="display:inline">
                         <input type="hidden" name="id" value="@product.Id" />
-                        <button type="submit" class="btn btn-danger  btn-sm">Delete</button>
+                        <button type="submit" class="btn btn-danger  btn-sm">Delete</button> <!--Add js validation when trying to delete a register-->
                     </form>
 
                     <form asp-action="Update" method="post" style="display:inline">
@@ -53,7 +51,6 @@
                         <button class="btn btn-primary btn-sm">Edit</button>
                     </form>
                 </div>
-
             </div>
         }
 
