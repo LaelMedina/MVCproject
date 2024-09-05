@@ -1,0 +1,56 @@
+﻿@model MVCproyect.Models.Product;
+
+@{
+    Product currentProduct = ViewBag.currentProduct;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+
+
+        <header class="text-center mb-4">
+            <h1>Update Product</h1>
+        </header>
+
+        <form asp-action="UpdateProduct" method="post" class="p-3">
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input type="text" asp-for="Name" class="form-control" value="@currentProduct.Name"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control">@currentProduct.Description</textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Stock" class="control-label"></label>
+                <input type="number" asp-for="Stock" class="form-control" value="@currentProduct.Stock"/>
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input type="number" asp-for="Price" class="form-control" value="@currentProduct.Price"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+
+        <a href="@Url.Action("Index")">Back to List</a>
+
+    </div>
+</body>
+</html>

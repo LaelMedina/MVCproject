@@ -57,7 +57,7 @@ namespace MVCproyect.Controllers
             return View();
         }
 
-        public IActionResult Create() 
+        public IActionResult Create()
         {
             return View("ProductForm");
         }
@@ -136,9 +136,85 @@ namespace MVCproyect.Controllers
             return View("Product");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateProduct(Product updatedProduct)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using MySqlConnection connection = _context.CreateConnection();
+
+                    connection.Open();
+
+                    string query = "UPDATE products SET name = @name, description = @description, price = @price, stock = @stock WHERE id = @id";
+
+                    using MySqlCommand command = new MySqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@id", updatedProduct.Id);
+                    command.Parameters.AddWithValue("@name", updatedProduct.Name);
+                    command.Parameters.AddWithValue("@description", updatedProduct.Description);
+                    command.Parameters.AddWithValue("@price", updatedProduct.Price);
+                    command.Parameters.AddWithValue("@stock", updatedProduct.Stock);
+
+                    command.ExecuteNonQuery();
+
+                    ViewData["product"] = updatedProduct;
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = "An error has occured: " + ex.Message.ToString() + "Product Id: " + updatedProduct.Id;
+
+                    return View("ErrorView");
+                }
+            }
+
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
         public IActionResult Update(int id)
         {
-            return View("ProductForm");
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+
+                connection.Open();
+
+                string query = "SELECT * FROM products WHERE id=@id";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@id", id);
+
+                command.ExecuteNonQuery();
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    Product product = new Product
+                    {
+                        Id = reader.GetInt32("id"),
+                        Name = reader.GetString("name"),
+                        Description = reader.GetString("description"),
+                        Price = reader.GetDecimal("price"),
+                        Stock = reader.GetInt32("stock"),
+                        CreatedAt = reader.GetDateTime("CreatedAt")
+                    };
+
+                    ViewBag.currentProduct = product;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
+
+            return View("EditProductForm");
         }
 
         [HttpPost]
