@@ -96,8 +96,7 @@ namespace MVCproyect.Controllers
                 }
             }
 
-            ViewData["Products"] = _products;
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         public IActionResult GetProductById(int id)
