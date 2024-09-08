@@ -47,6 +47,7 @@ namespace MVCproyect.Controllers
                         Id = reader.GetInt32("Id"),
                         ClientName = reader.GetString("ClientName"),
                         SaleContent = reader.GetString("SaleContent"),
+                        TotalUnits = reader.GetInt32("TotalUnits"),
                         TotalSale = reader.GetInt32("TotalSale"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
                         CreatedAt = reader.GetDateTime("CreatedAt"),

@@ -10,6 +10,8 @@ namespace MVCproyect.Models
 
         public string SaleContent { get; set; } = string.Empty;
 
+        public int TotalUnits { get; set; }
+
         public decimal TotalSale { get; set; }
 
         public string PaymentMethod { get; set; } = string.Empty;
