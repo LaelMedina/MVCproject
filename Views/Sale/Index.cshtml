@@ -1,5 +1,54 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    var sales = ViewData["Sales"] as List<MVCproyect.Models.Sale>;
 }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales History</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+
+
+        <header class="text-center mb-4">
+            <h1>Sales History</h1>
+        </header>
+
+        <div>
+            <a asp-action="Create" class="btn btn-primary">Insert Sale</a>
+        </div>
+
+        <div class="row bg-light p-3 border-bottom font-weight-bold">
+            <div class="col-sm-1">Id</div>
+            <div class="col-sm-2">Client Name</div>
+            <div class="col-sm-2">Sale Content</div>
+            <div class="col-sm-2">Total Sale</div>
+            <div class="col-sm-2">Payment Method</div>
+            <div class="col-sm-2">Created At</div>
+            <div class="col-sm-1">Action</div>
+        </div>
+
+        @foreach (var sale in sales)
+        {
+            <div class="row p-3 border-bottom">
+                <div class="col-sm-1">@sale.Id</div>
+                <div class="col-sm-2">@sale.ClientName</div>
+                <div class="col-sm-2">@sale.SaleContent</div>
+                <div class="col-sm-2">@sale.TotalSale</div>
+                <div class="col-sm-2">@sale.PaymentMethod</div>
+                <div class="col-sm-2">@sale.CreatedAt</div>
+
+                <div class="col-sm-1">
+                    <form asp-action="Update" method="post" style="display:inline">
+                        <input type="hidden" name="id" value="@sale.Id" />
+                        <button class="btn btn-primary btn-sm">Edit</button>
+                    </form>
+                </div>
+            </div>
+        }
+
+    </div>
+</body>
+</html>

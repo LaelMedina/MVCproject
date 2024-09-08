@@ -17,7 +17,6 @@ namespace MVCproyect.Controllers
         {
             _context = context;
             _products = new List<Product>();
-
             _idGeneratorService = new IdGeneratorService(_context);
         }
 
@@ -26,6 +25,7 @@ namespace MVCproyect.Controllers
             try
             {
                 using MySqlConnection connection = _context.CreateConnection();
+                
                 connection.Open();
 
                 string query = "SELECT * FROM products";
