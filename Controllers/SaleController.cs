@@ -12,12 +12,14 @@ namespace MVCproyect.Controllers
         private readonly MySqlService _context;
         private readonly List<Sale> _sales;
         private readonly IdGeneratorService _idGeneratorService;
+        private readonly ProductService _productService;
 
         public SaleController(MySqlService context)
         {
             _context = context;
             _sales = new List<Sale>();
             _idGeneratorService = new IdGeneratorService(_context);
+            _productService = new ProductService(_context);
         }
 
         // GET: SaleController
@@ -72,6 +74,11 @@ namespace MVCproyect.Controllers
         // GET: SaleController/Create
         public ActionResult Create()
         {
+
+            List<Product> products = _productService.GetProducts();
+
+            ViewData["products"] = products;
+
             return View("SaleForm");
         }
 
