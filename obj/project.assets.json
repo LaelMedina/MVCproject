@@ -3192,11 +3192,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\OneDrive\\Documentos\\University\\Patrones de diseño\\Semana 2\\Implementacion MVC\\MVCproyect\\MVCproyect.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\OneDrive\\Documentos\\Coding\\MVCproject\\MVCproyect.csproj",
       "projectName": "MVCproyect",
-      "projectPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\University\\Patrones de diseño\\Semana 2\\Implementacion MVC\\MVCproyect\\MVCproyect.csproj",
+      "projectPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\Coding\\MVCproject\\MVCproyect.csproj",
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\University\\Patrones de diseño\\Semana 2\\Implementacion MVC\\MVCproyect\\obj\\",
+      "outputPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\Coding\\MVCproject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 24.1\\Components\\Offline Packages",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x716YeFU8Vo=",
+  "dgSpecHash": "Oc9r6GX9cLE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\University\\Patrones de diseño\\Semana 2\\Implementacion MVC\\MVCproyect\\MVCproyect.csproj",
+  "projectFilePath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\Coding\\MVCproject\\MVCproyect.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\azure.identity\\1.11.3\\azure.identity.1.11.3.nupkg.sha512",

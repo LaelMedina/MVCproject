@@ -41,7 +41,7 @@
                 <div class="col-sm-2">@product.CreatedAt</div>
 
                 <div class="col-sm-2">
-                    <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirmDelete()">
+                    <form asp-action="Delete" method="post" style="display:inline">
                         <input type="hidden" name="id" value="@product.Id" />
                         <button type="submit" class="btn btn-danger  btn-sm">Delete</button> <!--Add js validation when trying to delete a register-->
                     </form>
