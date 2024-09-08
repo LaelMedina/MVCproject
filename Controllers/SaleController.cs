@@ -13,6 +13,7 @@ namespace MVCproyect.Controllers
         private readonly List<Sale> _sales;
         private readonly IdGeneratorService _idGeneratorService;
         private readonly ProductService _productService;
+        private readonly SaleService _saleService;
 
         public SaleController(MySqlService context)
         {
@@ -20,6 +21,7 @@ namespace MVCproyect.Controllers
             _sales = new List<Sale>();
             _idGeneratorService = new IdGeneratorService(_context);
             _productService = new ProductService(_context);
+            _saleService = new SaleService(_context);
         }
 
         // GET: SaleController
@@ -77,7 +79,11 @@ namespace MVCproyect.Controllers
 
             List<Product> products = _productService.GetProducts();
 
+            List<PaymentMethod> paymentMethods = _saleService.GetPaymentMethods();
+
             ViewData["products"] = products;
+
+            ViewData["paymentMethods"] = paymentMethods;
 
             return View("SaleForm");
         }
