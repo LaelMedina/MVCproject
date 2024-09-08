@@ -22,7 +22,7 @@ namespace MVCproyect.Services
             {
                 _connection.Open();
 
-                string query = "SELECT id, name FROM products";
+                string query = "SELECT id, name, price FROM products";
 
                 using MySqlCommand command = new MySqlCommand(query, _connection);
 
@@ -34,6 +34,7 @@ namespace MVCproyect.Services
                     {
                         Id = reader.GetInt32("id"),
                         Name = reader.GetString("name"),
+                        Price = reader.GetDecimal("price")
                     };
 
                     _products.Add(product);
