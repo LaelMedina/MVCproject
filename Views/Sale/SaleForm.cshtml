@@ -20,7 +20,7 @@
             <h1>Insert Sale</h1>
         </header>
 
-        <form asp-action="Create" method="post" class="p-3">
+        <form asp-controller="Sale" asp-action="Create" method="post" class="p-3">
 
             <div class="form-group">
                 <label asp-for="ClientName" class="control-label">Client Name</label>
@@ -30,37 +30,41 @@
 
             <div class="row">
                 <div class="col-md-8">
+
                     <div class="form-group">
                         <label asp-for="SaleContent" class="control-label">Sale Content</label>
-                        <select id="saleContent" class="form-select" aria-label="Default select example">
+                        <select asp-for="SaleContent" id="saleContent" class="form-select" aria-label="Default select example">
                             <option selected>Open this select menu</option>
                             @foreach (Product product in products)
                             {
-                                <option value="@product.Id" data-price="@product.Price">@product.Name</option>
+                                <option value="@product.Name" data-price="@product.Price">@product.Name</option>
                             }
 
                         </select>
                         <span asp-validation-for="SaleContent" class="text-danger"></span>
                     </div>
+
                 </div>
 
                 <div class="col-md-4">
+                    
                     <div class="form-group">
                         <label asp-for="TotalUnits" class="control-label"> Total Units</label>
                         <input id="totalUnits" type="number" asp-for="TotalUnits" class="form-control" />
                         <span asp-validation-for="TotalUnits" class="text-danger"></span>
                     </div>
+
                 </div>
             </div>
 
             <div class="form-group">
                 <label asp-for="PaymentMethod" class="control-label"> Payment Method</label>
-                <select class="form-select" aria-label="Default select example">
+                <select asp-for="PaymentMethod" class="form-select" aria-label="Default select example">
                     <option selected>Open this select menu</option>
 
                     @foreach (PaymentMethod paymentMethod in paymentMethods)
                     {
-                        <option value="@paymentMethod.Id">@paymentMethod.Name</option>
+                        <option value="@paymentMethod.Name">@paymentMethod.Name</option>
                     }
 
                 </select>
