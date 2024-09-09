@@ -48,6 +48,7 @@ namespace MVCproyect.Controllers
                         Id = reader.GetInt32("Id"),
                         ClientName = reader.GetString("ClientName"),
                         SaleContent = reader.GetString("SaleContent"),
+                        ProductSoldId = reader.GetInt32("ProductSoldId"),
                         TotalUnits = reader.GetInt32("TotalUnits"),
                         TotalSale = reader.GetDecimal("TotalSale"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
@@ -104,7 +105,7 @@ namespace MVCproyect.Controllers
 
                     connection.Open();
 
-                    string query = "INSERT INTO sales (id, clientname, salecontent, totalunits, totalsale, paymentmethod) VALUES (@Id, @ClientName, @SaleContent, @TotalUnits, @TotalSale, @PaymentMethod)";
+                    string query = "INSERT INTO sales (id, clientname, salecontent, productsoldid, totalunits, totalsale, paymentmethod) VALUES (@Id, @ClientName, @SaleContent, @ProductSoldId,@TotalUnits, @TotalSale, @PaymentMethod)";
 
                     using MySqlCommand command = new MySqlCommand(query, connection);
 
@@ -113,11 +114,14 @@ namespace MVCproyect.Controllers
                     command.Parameters.AddWithValue("@Id", newSale.Id);
                     command.Parameters.AddWithValue("@ClientName", newSale.ClientName);
                     command.Parameters.AddWithValue("@SaleContent", newSale.SaleContent);
+                    command.Parameters.AddWithValue("@ProductSoldId", newSale.ProductSoldId);
                     command.Parameters.AddWithValue("@TotalUnits", newSale.TotalUnits);
-                    command.Parameters.AddWithValue("@TotalSale", newSale.TotalSale); //calculate the total
+                    command.Parameters.AddWithValue("@TotalSale", newSale.TotalSale);
                     command.Parameters.AddWithValue("@PaymentMethod", newSale.PaymentMethod);
 
                     command.ExecuteNonQuery();
+
+                    _productService.UpdateStockAfterSale(newSale.ProductSoldId, newSale.TotalUnits);
                 }
                 catch (Exception ex)
                 {

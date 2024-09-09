@@ -1,5 +1,6 @@
 ﻿using MVCproyect.Models;
 using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 using ZstdSharp.Unsafe;
 
 namespace MVCproyect.Services
@@ -47,6 +48,28 @@ namespace MVCproyect.Services
             }
 
             return _products;
+        }
+
+        public void UpdateStockAfterSale(int productId, int units)
+        {
+            try
+            {
+                _connection.Open();
+
+                string query = "UPDATE products SET stock = (stock - @units) WHERE id = @ProductId";
+
+                using MySqlCommand command = new MySqlCommand(query, _connection);
+
+                command.Parameters.AddWithValue("@ProductId", productId);
+                command.Parameters.AddWithValue("@units", units);
+
+                command.ExecuteNonQuery();
+
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine($"{ex.Message}"); 
+            }
         }
 
     }

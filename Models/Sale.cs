@@ -11,6 +11,8 @@ namespace MVCproyect.Models
         [Required(ErrorMessage = "A product must be selected")]
         public string SaleContent { get; set; } = string.Empty;
 
+        public int ProductSoldId { get; set; }
+
         [Required(ErrorMessage = "The total units must be inserted")]
         public int TotalUnits { get; set; }
 
