@@ -3,56 +3,63 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products List</title>
 </head>
 <body>
 
     <div class="container mt-5">
 
-
         <header class="text-center mb-4">
-            <h1>List of Products</h1>
+            <h1 class="display-4">List of Products</h1>
         </header>
 
-        <div>
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        <div class="mb-4">
+            <a asp-action="Create" class="btn btn-primary btn-lg">Create New</a>
         </div>
 
-        <div class="row bg-light p-3 border-bottom font-weight-bold">
-            <div class="col-sm-1">Id</div>
-            <div class="col-sm-2">Name</div>
-            <div class="col-sm-2">Description</div>
-            <div class="col-sm-2">Price</div>
-            <div class="col-sm-1">Stock</div>
-            <div class="col-sm-2">Created At</div>
-            <div class="col-sm-2">Action</div>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Created At</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in products)
+                    {
+                        <tr>
+                            <td>@product.Id</td>
+                            <td>@product.Name</td>
+                            <td>@product.Description</td>
+                            <td>@product.Price$</td>
+                            <td>@product.Stock</td>
+                            <td>@product.CreatedAt</td>
+                            <td>
+                                <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                    <input type="hidden" name="id" value="@product.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                </form>
+
+                                <form asp-action="Update" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="@product.Id" />
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-
-        @foreach (var product in products)
-        {
-            <div class="row p-3 border-bottom">
-                <div class="col-sm-1">@product.Id</div>
-                <div class="col-sm-2">@product.Name</div>
-                <div class="col-sm-2">@product.Description</div>
-                <div class="col-sm-2">@product.Price$</div>
-                <div class="col-sm-1">@product.Stock</div>
-                <div class="col-sm-2">@product.CreatedAt</div>
-
-                <div class="col-sm-2">
-                    <form asp-action="Delete" method="post" style="display:inline">
-                        <input type="hidden" name="id" value="@product.Id" />
-                        <button type="submit" class="btn btn-danger  btn-sm">Delete</button> <!--Add js validation when trying to delete a register-->
-                    </form>
-
-                    <form asp-action="Update" method="post" style="display:inline">
-                        <input type="hidden" name="id" value="@product.Id" />
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                    </form>
-                </div>
-            </div>
-        }
 
     </div>
 </body>

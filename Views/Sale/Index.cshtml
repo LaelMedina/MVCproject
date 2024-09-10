@@ -3,55 +3,67 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales History</title>
 </head>
 <body>
 
     <div class="container mt-5">
 
-
         <header class="text-center mb-4">
-            <h1>Sales History</h1>
+            <h1 class="display-4">Sales History</h1>
         </header>
 
-        <div>
-            <a asp-action="Create" class="btn btn-primary">Insert Sale</a>
+        <div class="mb-4">
+            <a asp-action="Create" class="btn btn-primary btn-lg">Insert Sale</a>
         </div>
 
-        <div class="row bg-light p-3 border-bottom font-weight-bold">
-            <div class="col-sm-1">Id</div>
-            <div class="col-sm-2">Client Name</div>
-            <div class="col-sm-1">Product Id</div>
-            <div class="col-sm-2">Sale Content</div>
-            <div class="col-sm-1">Total Units</div>
-            <div class="col-sm-1">Total Sale</div>
-            <div class="col-sm-2">Payment Method</div>
-            <div class="col-sm-1">Created At</div>
-            <div class="col-sm-1">Action</div>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Client Name</th>
+                        <th scope="col">Product Id</th>
+                        <th scope="col">Sale Content</th>
+                        <th scope="col">Total Units</th>
+                        <th scope="col">Total Sale</th>
+                        <th scope="col">Payment Method</th>
+                        <th scope="col">Created At</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sale in sales)
+                    {
+                        <tr>
+                            <td>@sale.Id</td>
+                            <td>@sale.ClientName</td>
+                            <td>@sale.ProductSoldId</td>
+                            <td>@sale.SaleContent</td>
+                            <td>@sale.TotalUnits</td>
+                            <td>@sale.TotalSale</td>
+                            <td>@sale.PaymentMethod</td>
+                            <td>@sale.CreatedAt</td>
+                            <td>
+                                
+
+                                <!--
+                                        <form asp-action="Update" method="post" style="display:inline">
+                                        <input type="hidden" name="id" value="@sale.Id" />
+                                        <button class="btn btn-primary btn-sm">Edit</button>
+                                    </form>
+                                -->
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-
-        @foreach (var sale in sales)
-        {
-            <div class="row p-3 border-bottom">
-                <div class="col-sm-1">@sale.Id</div>
-                <div class="col-sm-2">@sale.ClientName</div>
-                <div class="col-sm-1">@sale.ProductSoldId</div>
-                <div class="col-sm-2">@sale.SaleContent</div>
-                <div class="col-sm-1">@sale.TotalUnits</div>
-                <div class="col-sm-1">@sale.TotalSale</div>
-                <div class="col-sm-2">@sale.PaymentMethod</div>
-                <div class="col-sm-1">@sale.CreatedAt</div>
-
-                <div class="col-sm-1">
-                    <form asp-action="Update" method="post" style="display:inline">
-                        <input type="hidden" name="id" value="@sale.Id" />
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                    </form>
-                </div>
-            </div>
-        }
 
     </div>
 </body>

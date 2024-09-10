@@ -1,51 +1,62 @@
 ﻿@model MVCproyect.Models.Product;
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Products List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
 </head>
 <body>
 
     <div class="container mt-5">
 
-
         <header class="text-center mb-4">
-            <h1>Add Product</h1>
+            <h1 class="display-4">Add Product</h1>
         </header>
 
-        <form asp-action="Create" method="post" class="p-3">
+        <form asp-action="Create" method="post" class="p-4 border rounded bg-light shadow-sm">
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name</label>
                 <input type="text" asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Name"></span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Description</label>
                 <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Description"></span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Stock" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Stock" class="form-label">Stock</label>
                 <input type="number" asp-for="Stock" class="form-control" />
-                <span asp-validation-for="Stock" class="text-danger"></span>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Stock"></span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label">Price</label>
                 <input type="number" asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Price"></span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Create</button>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary btn-lg">Create</button>
             </div>
         </form>
 
-        <a href="@Url.Action("Index")">Back to List</a>
+        <div class="mt-3">
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+        </div>
 
     </div>
 </body>

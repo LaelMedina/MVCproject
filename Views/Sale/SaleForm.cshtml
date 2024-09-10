@@ -6,87 +6,81 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Sales History</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Sale</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
     <div class="container mt-5">
 
-
         <header class="text-center mb-4">
-            <h1>Insert Sale</h1>
+            <h1 class="display-5">Insert New Sale</h1>
         </header>
 
-        <form asp-controller="Sale" asp-action="Create" method="post" class="p-3">
+        <form asp-controller="Sale" asp-action="Create" method="post" class="border p-4 shadow-sm bg-light rounded">
 
-            <div class="form-group">
-                <label asp-for="ClientName" class="control-label">Client Name</label>
-                <input type="text" asp-for="ClientName" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="ClientName" class="form-label">Client Name</label>
+                <input type="text" asp-for="ClientName" class="form-control" placeholder="Enter client name" />
                 <span asp-validation-for="ClientName" class="text-danger"></span>
             </div>
 
             <div class="row">
-                <div class="col-md-8">
-
-                    <div class="form-group">
-                        <label asp-for="SaleContent" class="control-label">Sale Content</label>
-                        <select asp-for="SaleContent" id="saleContent" class="form-select" aria-label="Default select example">
-                            <option selected>Open this select menu</option>
-                            @foreach (Product product in products)
-                            {
-                                <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>
-                            }
-
-                        </select>
-                        <span asp-validation-for="SaleContent" class="text-danger"></span>
-                    </div>
-
+                <div class="col-md-8 mb-3">
+                    <label asp-for="SaleContent" class="form-label">Sale Content</label>
+                    <select asp-for="SaleContent" id="saleContent" class="form-select" aria-label="Select product">
+                        <option value="" disabled selected>Choose product...</option>
+                        @foreach (Product product in products)
+                        {
+                            <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="SaleContent" class="text-danger"></span>
                 </div>
 
-                <div class="col-md-4">
-                    
-                    <div class="form-group">
-                        <label asp-for="TotalUnits" class="control-label"> Total Units</label>
-                        <input id="totalUnits" type="number" asp-for="TotalUnits" class="form-control" />
-                        <span asp-validation-for="TotalUnits" class="text-danger"></span>
-                    </div>
-
+                <div class="col-md-4 mb-3">
+                    <label asp-for="TotalUnits" class="form-label">Total Units</label>
+                    <input id="totalUnits" type="number" asp-for="TotalUnits" class="form-control" placeholder="Enter units" min="1" />
+                    <span asp-validation-for="TotalUnits" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="PaymentMethod" class="control-label"> Payment Method</label>
-                <select asp-for="PaymentMethod" class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-
+            <div class="mb-3">
+                <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
+                <select asp-for="PaymentMethod" class="form-select" aria-label="Select payment method">
+                    <option value="" disabled selected>Choose payment method...</option>
                     @foreach (PaymentMethod paymentMethod in paymentMethods)
                     {
                         <option value="@paymentMethod.Name">@paymentMethod.Name</option>
                     }
-
                 </select>
                 <span asp-validation-for="PaymentMethod" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="TotalSale" class="control-label">Total Sale</label>
-                <input type="text" id="totalSale" asp-for="TotalSale" class="form-control" readonly/>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="TotalSale" class="form-label">Total Sale</label>
+                    <input type="text" id="totalSale" asp-for="TotalSale" class="form-control" readonly />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ProductSoldId" class="form-label" hidden></label>
+                    <input type="number" id="productSoldId" asp-for="ProductSoldId" class="form-control" readonly hidden />
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="ProductSoldId" class="control-label" hidden/>
-                <input type="number" id="productSoldId" asp-for="ProductSoldId" class="form-control" readonly hidden/>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Save Sale</button>
             </div>
         </form>
 
-        <a href="@Url.Action("Index")">Back to List</a>
+        <div class="text-center mt-3">
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Sales List</a>
+        </div>
 
     </div>
 
@@ -105,7 +99,7 @@
                 $('#productSoldId').val(productId);
             }
 
-            $('#saleContent, #totalUnits').on('change keyup', function() {
+            $('#saleContent, #totalUnits').on('change keyup', function () {
                 calculateTotal();
                 fnGetProductSoldId();
             });
