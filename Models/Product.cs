@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics;
+using Microsoft.Extensions.Primitives;
 using System.ComponentModel.DataAnnotations;
 
 namespace MVCproyect.Models
@@ -7,7 +8,7 @@ namespace MVCproyect.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "The Product's name is required")]
+        [Required(ErrorMessage = "The name of the product is required")]
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "The Product's description is required")]

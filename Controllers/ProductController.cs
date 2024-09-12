@@ -10,7 +10,6 @@ namespace MVCproyect.Controllers
     {
         private readonly MySqlService _context;
         private readonly List<Product> _products;
-
         private readonly IdGeneratorService _idGeneratorService;
 
         public ProductController(MySqlService context)
@@ -50,7 +49,8 @@ namespace MVCproyect.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message.ToString());
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
             }
 
             ViewData["Products"] = _products;
@@ -91,7 +91,6 @@ namespace MVCproyect.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "An error has occured: " + ex.Message.ToString() + "Product Id: " + newProduct.Id;
-
                     return View("ErrorView");
                 }
             }
@@ -130,7 +129,8 @@ namespace MVCproyect.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message.ToString());
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
             }
 
             return View("Product");
@@ -165,7 +165,6 @@ namespace MVCproyect.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.ErrorMessage = "An error has occured: " + ex.Message.ToString() + "Product Id: " + updatedProduct.Id;
-
                     return View("ErrorView");
                 }
             }
@@ -211,7 +210,8 @@ namespace MVCproyect.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
             }
 
             return View("EditProductForm");
@@ -232,9 +232,10 @@ namespace MVCproyect.Controllers
             {
                 command.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message.ToString());
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
             }
 
             return RedirectToAction("Index");

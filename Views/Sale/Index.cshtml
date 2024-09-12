@@ -49,14 +49,16 @@
                             <td>@sale.PaymentMethod</td>
                             <td>@sale.CreatedAt</td>
                             <td>
-                                
 
-                                <!--
-                                        <form asp-action="Update" method="post" style="display:inline">
-                                        <input type="hidden" name="id" value="@sale.Id" />
-                                        <button class="btn btn-primary btn-sm">Edit</button>
-                                    </form>
-                                -->
+                                <form asp-action="Update" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="@sale.Id" />
+                                    <button class="btn btn-outline-primary btn-sm">Edit</button>
+                                </form>
+
+                                <form asp-action="Delete" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="@sale.Id"/>
+                                    <button class="btn btn-outline-danger btn-sm">Delete</button>
+                                </form>
 
                             </td>
                         </tr>

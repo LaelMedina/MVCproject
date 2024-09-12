@@ -25,13 +25,13 @@
                 <label asp-for="Name" class="form-label">Name</label>
                 <input type="text" asp-for="Name" class="form-control" value="@currentProduct.Name" />
                 <div class="invalid-feedback">
-                    <span asp-validation-for="Name"></span>
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Description" class="form-label">Description</label>
-                <textarea asp-for="Description" class="form-control" placeholder="Enter product description">@currentProduct.Description</textarea>
+                <textarea asp-for="Description" class="form-control" placeholder="Enter product description"></textarea>
                 <div class="invalid-feedback">
                     <span asp-validation-for="Description"></span>
                 </div>
@@ -48,7 +48,7 @@
             <div class="mb-3">
                 <label asp-for="Price" class="form-label">Price</label>
                 <input type="number" asp-for="Price" class="form-control" value="@currentProduct.Price"$ />
-                <span asp-validation-for="Price"></span>
+                <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
