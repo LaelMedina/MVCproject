@@ -1,5 +1,6 @@
 using MathNet.Numerics;
 using MVCproyect.Models;
+using MVCproyect.Services;
 
 namespace MVCproyect
 {
@@ -13,7 +14,10 @@ namespace MVCproyect
             builder.Services.AddControllersWithViews();
 
             // Register AppDbContext
+            //App Services
             builder.Services.AddSingleton<MySqlService>();
+            builder.Services.AddSingleton<IdGeneratorService>();
+            builder.Services.AddSingleton<SaleService>();
 
             var app = builder.Build();
 

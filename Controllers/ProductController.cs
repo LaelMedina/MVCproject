@@ -12,11 +12,11 @@ namespace MVCproyect.Controllers
         private readonly List<Product> _products;
         private readonly IdGeneratorService _idGeneratorService;
 
-        public ProductController(MySqlService context)
+        public ProductController(MySqlService context, IdGeneratorService idGeneratorService)
         {
             _context = context;
+            _idGeneratorService = idGeneratorService;
             _products = new List<Product>();
-            _idGeneratorService = new IdGeneratorService(_context);
         }
 
         public IActionResult Index()
