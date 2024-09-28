@@ -8,7 +8,7 @@
 
         public string PasswordHash { get; set; } = string.Empty;
 
-        public int RolId { get; set; }
+        public int RoleId { get; set; }
 
     }
 }
