@@ -182,3 +182,4 @@ C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\obj\Debug\net8.0\refint\M
 C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\obj\Debug\net8.0\MVCproyect.pdb
 C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\obj\Debug\net8.0\MVCproyect.genruntimeconfig.cache
 C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\obj\Debug\net8.0\ref\MVCproyect.dll
+C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\bin\Debug\net8.0\BCrypt.Net-Next.dll
