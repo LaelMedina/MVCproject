@@ -4,22 +4,22 @@ using MySql.Data.MySqlClient;
 
 public class UserService
 {
-    private readonly string _connectionString;
+    private readonly MySqlConnection _connection;
 
-    public UserService(string connectionString)
+    public UserService(MySqlService connection)
     {
-        _connectionString = connectionString;
+        _connection = connection.CreateConnection();
     }
 
     public User GetUserByUsername(string username)
     {
-        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        try
         {
             string query = "SELECT * FROM Users WHERE Username = @username";
-            MySqlCommand command = new MySqlCommand(query, connection);
+            MySqlCommand command = new MySqlCommand(query, _connection);
             command.Parameters.AddWithValue("@username", username);
 
-            connection.Open();
+            _connection.Open();
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 if (reader.Read())
@@ -29,10 +29,14 @@ public class UserService
                         UserId = reader.GetInt32("Id"),
                         UserName = reader.GetString("Username"),
                         PasswordHash = reader.GetString("PasswordHash"),
-                        RolId = reader.GetInt32("Role")
+                        RoleId = reader.GetInt32("Role")
                     };
                 }
             }
+        }
+        catch (Exception ex) 
+        { 
+            Console.WriteLine(ex.Message);
         }
         return null;
     }
