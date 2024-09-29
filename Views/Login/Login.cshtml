@@ -1,0 +1,47 @@
+﻿@model MVCproyect.Models.User;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="text-center">
+            <h1 class="display-4 mb-4">Log In</h1>
+
+            <div class="row justify-content-center mt-4">
+                <form method="post" asp-action="Login" class="p-4 border rounded bg-light shadow-sm">
+
+                    <div class="mb-3">
+                        <label asp-for="UserName">Username:</label>
+                        <input type="text" asp-for="UserName" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PasswordHash">Password:</label>
+                        <input type="password" asp-for="PasswordHash" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                </form>
+
+
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p style="color:red;">@ViewBag.ErrorMessage</p>
+                }
+            </div>
+
+            <div class="mt-5">
+                <p>For more information, check out our <a href="https://learn.microsoft.com/aspnet/core" target="_blank">documentation</a>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
