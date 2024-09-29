@@ -11,33 +11,37 @@ public class UserService
         _connection = connection.CreateConnection();
     }
 
-    public User GetUserByUsername(string username)
+    public User? GetUserByUsername(string username)
     {
         try
         {
+            _connection.Open();
             string query = "SELECT * FROM Users WHERE Username = @username";
             MySqlCommand command = new MySqlCommand(query, _connection);
             command.Parameters.AddWithValue("@username", username);
 
-            _connection.Open();
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 if (reader.Read())
                 {
                     return new User
                     {
-                        UserId = reader.GetInt32("Id"),
                         UserName = reader.GetString("Username"),
-                        PasswordHash = reader.GetString("PasswordHash"),
-                        RoleId = reader.GetInt32("Role")
+                        PasswordHash = reader.GetString("PasswordHash")
                     };
                 }
             }
+
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         { 
             Console.WriteLine(ex.Message);
         }
+        finally
+        {
+            _connection.Close();
+        }
+
         return null;
     }
 
