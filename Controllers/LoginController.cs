@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using MVCproyect.Models;
 
-public class AccountController : Controller
+public class LoginController : Controller
 {
     private readonly UserService _userService;
 
-    public AccountController(UserService userService)
+    public LoginController(UserService userService)
     {
         _userService = userService;
     }
