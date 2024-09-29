@@ -17,11 +17,11 @@ public class LoginController : Controller
     }
 
     [HttpPost]
-    public IActionResult Login(string username, string password)
+    public IActionResult Login(User user)
     {
-        if (_userService.ValidateUser(username, password))
+        if (_userService.ValidateUser(user.UserName,user.PasswordHash))
         {
-            User user = _userService.GetUserByUsername(username);
+            user = _userService.GetUserByUsername(user.UserName);
             HttpContext.Session.SetString("Username", user.UserName);
             HttpContext.Session.SetInt32("Role", user.RoleId);
             return RedirectToAction("Index", "Home");
