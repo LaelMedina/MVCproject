@@ -26,8 +26,10 @@ public class UserService
                 {
                     return new User
                     {
+                        UserId = reader.GetInt32("UserId"),
                         UserName = reader.GetString("Username"),
-                        PasswordHash = reader.GetString("PasswordHash")
+                        PasswordHash = reader.GetString("PasswordHash"),
+                        RoleId = reader.GetInt32("RoleId")
                     };
                 }
             }
