@@ -1,5 +1,6 @@
 using MathNet.Numerics;
 using MVCproyect.Models;
+using MVCproyect.Repository;
 using MVCproyect.Services;
 
 namespace MVCproyect
@@ -23,11 +24,13 @@ namespace MVCproyect
 
             // Register AppDbContext
             //App Services
-            builder.Services.AddSingleton<MySqlService>();
             builder.Services.AddSingleton<IdGeneratorService>();
+            builder.Services.AddSingleton<MySqlService>();
+            builder.Services.AddSingleton<ProductService>();
             builder.Services.AddSingleton<SaleService>();
             builder.Services.AddSingleton<UserService>();
             builder.Services.AddSingleton<ProductRepository>();
+            builder.Services.AddSingleton<SaleRepository>();
 
             var app = builder.Build();
 
