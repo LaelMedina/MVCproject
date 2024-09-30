@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using MVCproyect.Models;
+using MVCproyect.Services;
 using MySql.Data.MySqlClient;
 
 public class UserService

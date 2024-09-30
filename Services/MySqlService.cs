@@ -2,7 +2,7 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace MVCproyect.Models
+namespace MVCproyect.Services
 {
     public class MySqlService
     {
@@ -14,10 +14,10 @@ namespace MVCproyect.Models
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public MySqlConnection CreateConnection() 
+        public MySqlConnection CreateConnection()
         {
             return new MySqlConnection(_connectionString);
         }
-        
+
     }
 }
