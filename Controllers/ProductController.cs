@@ -142,19 +142,11 @@ namespace MVCproyect.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            using MySqlConnection connection = _context.CreateConnection();
-            connection.Open();
-
-            string query = "DELETE FROM products WHERE id=@id";
-
-            using MySqlCommand command = new MySqlCommand(query, connection);
-            command.Parameters.AddWithValue("@id", id);
-
             try
             {
-                command.ExecuteNonQuery();
+                await _productRepository.DeleteProductAsync(id);
             }
             catch (Exception ex)
             {

@@ -126,9 +126,26 @@ public class ProductRepository : IProductRepository
 
     }
 
-    public Task DeleteProductAsync(int id)
+    public async Task DeleteProductAsync(int id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using MySqlConnection connection = _context.CreateConnection();
+
+            await connection.OpenAsync();
+
+            string query = "DELETE FROM products WHERE id=@id";
+
+            using MySqlCommand command = new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            await command.ExecuteNonQueryAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public Task UpdateProductAsync(Product newProduct)
