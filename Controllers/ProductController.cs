@@ -3,56 +3,28 @@ using MySql.Data.MySqlClient;
 using MVCproyect.Models;
 using System.Data;
 using MVCproyect.Services;
+using MVCproyect.Interfaces;
 
 namespace MVCproyect.Controllers
 {
     public class ProductController : Controller
     {
         private readonly MySqlService _context;
-        private readonly List<Product> _products;
         private readonly IdGeneratorService _idGeneratorService;
+        private readonly ProductRepository _productRepository;
+        private List<Product> _products;
 
-        public ProductController(MySqlService context, IdGeneratorService idGeneratorService)
+        public ProductController(MySqlService context, IdGeneratorService idGeneratorService, ProductRepository productRepository)
         {
             _context = context;
             _idGeneratorService = idGeneratorService;
             _products = new List<Product>();
+            _productRepository = productRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            try
-            {
-                using MySqlConnection connection = _context.CreateConnection();
-                
-                connection.Open();
-
-                string query = "SELECT * FROM products";
-
-                using MySqlCommand command = new MySqlCommand(query, connection);
-
-                using MySqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Product product = new Product
-                    {
-                        Id = reader.GetInt32("id"),
-                        Name = reader.GetString("name"),
-                        Description = reader.GetString("description"),
-                        Price = reader.GetDecimal("price"),
-                        Stock = reader.GetInt32("stock"),
-                        CreatedAt = reader.GetDateTime("CreatedAt")
-                    };
-                    _products.Add(product);
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = ex.Message;
-                return View("ErrorMessage");
-            }
-
+            _products = await _productRepository.GetProductsAsync();
             ViewData["Products"] = _products;
             return View();
         }

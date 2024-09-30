@@ -27,6 +27,7 @@ namespace MVCproyect
             builder.Services.AddSingleton<IdGeneratorService>();
             builder.Services.AddSingleton<SaleService>();
             builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<ProductRepository>();
 
             var app = builder.Build();
 

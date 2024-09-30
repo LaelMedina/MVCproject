@@ -4,7 +4,7 @@ namespace MVCproyect.Interfaces
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetProductsAsync();
+        Task<List<Product>> GetProductsAsync();
 
         Task<Product> GetProductByIdAsync(int id);
 
