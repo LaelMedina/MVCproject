@@ -1,36 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCproyect.Interfaces;
 using MVCproyect.Models;
 using MySql.Data.MySqlClient;
 
 namespace MVCproyect.Services
 {
-    public class SaleService
+    public class SaleService : ISaleService
     {
 
-        private readonly MySqlConnection _connection;
+        private readonly MySqlService _context;
 
-        private readonly List<PaymentMethod> _paymentMethods;
-
-        public SaleService(MySqlService connection) 
+        public SaleService(MySqlService context) 
         { 
-            _connection = connection.CreateConnection();
-            _paymentMethods = new List<PaymentMethod>();
+            _context = context;
         }
 
-        public List<PaymentMethod> GetPaymentMethods()
+        public async Task<List<PaymentMethod>> GetPaymentMethodsAsync()
         {
+            List<PaymentMethod> _paymentMethods = new List<PaymentMethod>();
+
             try 
             {
+                using MySqlConnection connection = _context.CreateConnection();
 
-                _connection.Open();
+                await connection.OpenAsync();
 
                 string query = "SELECT * FROM paymentmethods";
 
-                using MySqlCommand command = new MySqlCommand(query, _connection);
+                using MySqlCommand command = new MySqlCommand(query, connection);
 
-                using MySqlDataReader reader = command.ExecuteReader();
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
 
-                while (reader.Read())
+                while (await reader.ReadAsync())
                 {
                     PaymentMethod paymentMethod = new PaymentMethod() 
                     { 
