@@ -6,6 +6,7 @@ namespace MVCproyect.Models
 {
     public class Product
     {
+        [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The name of the product is required")]
