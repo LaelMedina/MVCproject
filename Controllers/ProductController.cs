@@ -70,41 +70,9 @@ namespace MVCproyect.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult GetProductById(int id)
+        public async Task<IActionResult> GetProductById(int id)
         {
-            using MySqlConnection connection = _context.CreateConnection();
-            connection.Open();
-
-            try
-            {
-                string query = "SELECT * FROM products WHERE id=@id";
-
-                using MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@id", id);
-
-                using MySqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    Product product = new Product
-                    {
-                        Id = reader.GetInt32("id"),
-                        Name = reader.GetString("name"),
-                        Description = reader.GetString("description"),
-                        Price = reader.GetDecimal("price"),
-                        Stock = reader.GetInt32("stock"),
-                        CreatedAt = reader.GetDateTime("CreatedAt")
-                    };
-
-                    ViewData["product"] = product;
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = ex.Message;
-                return View("ErrorMessage");
-            }
-
+            Product product = await _productRepository.GetProductByIdAsync(id);
             return View("Product");
         }
 
