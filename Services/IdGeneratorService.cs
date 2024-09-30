@@ -1,32 +1,35 @@
-﻿using MVCproyect.Models;
+﻿using MVCproyect.Interfaces;
+using MVCproyect.Models;
 using MySql.Data.MySqlClient;
 
 namespace MVCproyect.Services
 {
-    public class IdGeneratorService
+    public class IdGeneratorService : IIdGeneratorService
     {
-        private readonly MySqlConnection _connection;
+        private readonly MySqlService _context;
 
-        public IdGeneratorService(MySqlService connection)
+        public IdGeneratorService(MySqlService context)
         {
-            _connection = connection.CreateConnection();
+            _context = context;
         }
 
-        public int GenerateNextId(string tableName)
+        public async Task<int> GenerateNextIdAsync(string tableName)
         {
             int newId = 1;
 
             try
             {
-                _connection.Open();
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
 
                 string query = $"SELECT MAX(id) FROM {tableName}";
 
-                using MySqlCommand command = new MySqlCommand(query, _connection);
+                using MySqlCommand command = new MySqlCommand(query, connection);
 
-                var lastId = command.ExecuteScalar();
+                var lastId = command.ExecuteScalarAsync();
 
-                if (lastId != DBNull.Value)
+                if (await lastId != DBNull.Value)
                 {
                     newId = Convert.ToInt32(lastId) + 1;
                 }
