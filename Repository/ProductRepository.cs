@@ -148,8 +148,31 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public Task UpdateProductAsync(Product newProduct)
+    public async Task UpdateProductAsync(Product updatedProduct)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using MySqlConnection connection = _context.CreateConnection();
+
+            await connection.OpenAsync();
+
+            string query = "UPDATE products SET name = @name, description = @description, price = @price, stock = @stock WHERE id = @id";
+
+            using MySqlCommand command = new MySqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@id", updatedProduct.Id);
+            command.Parameters.AddWithValue("@name", updatedProduct.Name);
+            command.Parameters.AddWithValue("@description", updatedProduct.Description);
+            command.Parameters.AddWithValue("@price", updatedProduct.Price);
+            command.Parameters.AddWithValue("@stock", updatedProduct.Stock);
+
+            await command.ExecuteNonQueryAsync();
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+
     }
 }
