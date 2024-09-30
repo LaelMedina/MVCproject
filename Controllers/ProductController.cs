@@ -10,14 +10,12 @@ namespace MVCproyect.Controllers
     public class ProductController : Controller
     {
         private readonly MySqlService _context;
-        private readonly IdGeneratorService _idGeneratorService;
         private readonly ProductRepository _productRepository;
         private List<Product> _products;
 
         public ProductController(MySqlService context, IdGeneratorService idGeneratorService, ProductRepository productRepository)
         {
             _context = context;
-            _idGeneratorService = idGeneratorService;
             _products = new List<Product>();
             _productRepository = productRepository;
         }

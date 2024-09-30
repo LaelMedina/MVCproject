@@ -54,7 +54,6 @@ public class ProductRepository : IProductRepository
         return products;
     }
 
-
     public async Task<Product> GetProductByIdAsync(int id)
     {
 
