@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MVCproyect.Models;
+using MVCproyect.Repository;
 using MVCproyect.Services;
 using MySql.Data.MySqlClient;
 using System.ComponentModel;
@@ -12,53 +13,27 @@ namespace MVCproyect.Controllers
     {
 
         private readonly MySqlService _context;
-        private readonly List<Sale> _sales;
+        private List<Sale> _sales;
         private readonly IdGeneratorService _idGeneratorService;
         private readonly ProductService _productService;
         private readonly SaleService _saleService;
+        private readonly SaleRepository _saleRepository;
 
-        public SaleController(MySqlService context)
+        public SaleController(MySqlService context, SaleRepository saleRepository)
         {
             _context = context;
             _sales = new List<Sale>();
             _idGeneratorService = new IdGeneratorService(_context);
             _productService = new ProductService(_context);
             _saleService = new SaleService(_context);
+            _saleRepository = saleRepository;
         }
 
-        // GET: SaleController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             try
             {
-                using MySqlConnection connection = _context.CreateConnection();
-
-                connection.Open();
-
-                string query = "SELECT * FROM sales";
-
-                using MySqlCommand command = new MySqlCommand(query, connection);
-
-                using MySqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Sale sale = new Sale()
-                    {
-                        Id = reader.GetInt32("Id"),
-                        ClientName = reader.GetString("ClientName"),
-                        SaleContent = reader.GetString("SaleContent"),
-                        ProductSoldId = reader.GetInt32("ProductSoldId"),
-                        TotalUnits = reader.GetInt32("TotalUnits"),
-                        TotalSale = reader.GetDecimal("TotalSale"),
-                        PaymentMethod = reader.GetString("PaymentMethod"),
-                        CreatedAt = reader.GetDateTime("CreatedAt"),
-                    };
-
-                    _sales.Add(sale);
-
-                }
-
+                _sales = await _saleRepository.GetSalesAsync();
             }
             catch (Exception ex)
             {
@@ -70,13 +45,11 @@ namespace MVCproyect.Controllers
             return View();
         }
 
-        // GET: SaleController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: SaleController/Create
         public ActionResult Create()
         {
 
@@ -91,35 +64,16 @@ namespace MVCproyect.Controllers
             return View("SaleForm");
         }
 
-        // POST: SaleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Sale newSale)
+        public async Task<ActionResult> Create(Sale newSale)
         {
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    using MySqlConnection connection = _context.CreateConnection();
-
-                    connection.Open();
-
-                    string query = "INSERT INTO sales (id, clientname, salecontent, productsoldid, totalunits, totalsale, paymentmethod) VALUES (@Id, @ClientName, @SaleContent, @ProductSoldId,@TotalUnits, @TotalSale, @PaymentMethod)";
-
-                    using MySqlCommand command = new MySqlCommand(query, connection);
-
-                    newSale.Id = _idGeneratorService.GenerateNextId("sales");
-
-                    command.Parameters.AddWithValue("@Id", newSale.Id);
-                    command.Parameters.AddWithValue("@ClientName", newSale.ClientName);
-                    command.Parameters.AddWithValue("@SaleContent", newSale.SaleContent);
-                    command.Parameters.AddWithValue("@ProductSoldId", newSale.ProductSoldId);
-                    command.Parameters.AddWithValue("@TotalUnits", newSale.TotalUnits);
-                    command.Parameters.AddWithValue("@TotalSale", newSale.TotalSale);
-                    command.Parameters.AddWithValue("@PaymentMethod", newSale.PaymentMethod);
-
-                    command.ExecuteNonQuery();
+                    await _saleRepository.AddSaleAsync(newSale);
 
                     _productService.UpdateStockAfterSale(newSale.ProductSoldId, newSale.TotalUnits);
                 }
@@ -132,13 +86,11 @@ namespace MVCproyect.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: SaleController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: SaleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -153,13 +105,11 @@ namespace MVCproyect.Controllers
             }
         }
 
-        // GET: SaleController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: SaleController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

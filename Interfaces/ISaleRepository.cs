@@ -4,13 +4,13 @@ namespace MVCproyect.Interfaces
 {
     public interface ISaleRepository
     {
-        Task<List<Product>> GetSalesAsync();
+        Task<List<Sale>> GetSalesAsync();
 
-        Task<Product> GetSaleByIdAsync(int id);
+        Task<Sale> GetSaleByIdAsync(int id);
 
-        Task AddSaleAsync(Product newProduct);
+        Task AddSaleAsync(Sale newSale);
 
-        Task UpdateSaleAsync(Product newProduct);
+        Task UpdateSaleAsync(Sale newSale);
 
         Task DeleteSaleAsync(int id);
     }
