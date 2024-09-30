@@ -1,35 +1,38 @@
-﻿using MVCproyect.Models;
+﻿using MVCproyect.Interfaces;
+using MVCproyect.Models;
 using MySql.Data.MySqlClient;
 using System.Data.SqlClient;
 using ZstdSharp.Unsafe;
 
 namespace MVCproyect.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
 
-        private readonly MySqlConnection _connection;
-        private readonly List<Product> _products;
+        private readonly MySqlService _context;
+        private List<Product> _products;
 
-        public ProductService(MySqlService connection)
+        public ProductService(MySqlService context)
         {
-            _connection = connection.CreateConnection();
+            _context = context;
             _products = new List<Product>();
         }
 
-        public List<Product> GetProducts()
+        public async Task<List<Product>> GetProductsAsync()
         {
             try
             {
-                _connection.Open();
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
 
                 string query = "SELECT id, name, price FROM products";
 
-                using MySqlCommand command = new MySqlCommand(query, _connection);
+                using MySqlCommand command = new MySqlCommand(query, connection);
 
-                using MySqlDataReader reader = command.ExecuteReader();
+                using MySqlDataReader reader = (MySqlDataReader) await command.ExecuteReaderAsync();
 
-                while (reader.Read())
+                while (await reader.ReadAsync())
                 {
                     Product product = new Product()
                     {
@@ -50,20 +53,23 @@ namespace MVCproyect.Services
             return _products;
         }
 
-        public void UpdateStockAfterSale(int productId, int units)
+        public async Task UpdateStockAfterSale(int productId, int units)
         {
             try
             {
-                _connection.Open();
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
 
                 string query = "UPDATE products SET stock = (stock - @units) WHERE id = @ProductId";
 
-                using MySqlCommand command = new MySqlCommand(query, _connection);
+                using MySqlCommand command = new MySqlCommand(query, connection);
 
                 command.Parameters.AddWithValue("@ProductId", productId);
+
                 command.Parameters.AddWithValue("@units", units);
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
 
             }
             catch (Exception ex) 
@@ -71,6 +77,5 @@ namespace MVCproyect.Services
                 Console.WriteLine($"{ex.Message}"); 
             }
         }
-
     }
 }

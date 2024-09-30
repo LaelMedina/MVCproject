@@ -50,12 +50,12 @@ namespace MVCproyect.Controllers
             return View();
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
 
-            List<Product> products = _productService.GetProducts();
+            List<Product> products = await _productService.GetProductsAsync();
 
-            List<PaymentMethod> paymentMethods = _saleService.GetPaymentMethods();
+            List<PaymentMethod> paymentMethods = await _saleService.GetPaymentMethodsAsync();
 
             ViewData["products"] = products;
 

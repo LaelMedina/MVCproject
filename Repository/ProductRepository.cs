@@ -108,7 +108,7 @@ public class ProductRepository : IProductRepository
 
             using MySqlCommand command = new MySqlCommand(query, connection);
 
-            newProduct.Id = _idGeneratorService.GenerateNextId("products");
+            newProduct.Id = await _idGeneratorService.GenerateNextIdAsync("products");
 
             command.Parameters.AddWithValue("@id", newProduct.Id);
             command.Parameters.AddWithValue("@name", newProduct.Name);

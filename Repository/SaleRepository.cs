@@ -112,7 +112,7 @@ namespace MVCproyect.Repository
 
                 using MySqlCommand command = new MySqlCommand(query, connection);
 
-                newSale.Id = _idGeneratorService.GenerateNextId("sales");
+                newSale.Id = await _idGeneratorService.GenerateNextIdAsync("sales");
 
                 command.Parameters.AddWithValue("@Id", newSale.Id);
                 command.Parameters.AddWithValue("@ClientName", newSale.ClientName);
