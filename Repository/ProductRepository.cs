@@ -6,10 +6,12 @@ using MySql.Data.MySqlClient;
 public class ProductRepository : IProductRepository
 {
     private readonly MySqlService _context;
+    private readonly IdGeneratorService _idGeneratorService;
 
-    public ProductRepository(MySqlService context)
+    public ProductRepository(MySqlService context, IdGeneratorService idGeneratorService)
     {
         _context = context;
+        _idGeneratorService = idGeneratorService;
     }
 
     public async Task<List<Product>> GetProductsAsync()
@@ -61,13 +63,13 @@ public class ProductRepository : IProductRepository
         try
         {
             using MySqlConnection connection = _context.CreateConnection();
-           
+
             await connection.OpenAsync();
-            
+
             string query = "SELECT * FROM products WHERE id=@id";
 
             using MySqlCommand command = new MySqlCommand(query, connection);
-            
+
             command.Parameters.AddWithValue("@id", id);
 
             using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
@@ -88,15 +90,40 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);   
+            Console.WriteLine(ex.Message);
         }
 
         return product;
     }
 
-    public Task AddProductAsync(Product newProduct)
+    public async Task AddProductAsync(Product newProduct)
     {
-        throw new NotImplementedException();
+
+        try
+        {
+            using MySqlConnection connection = _context.CreateConnection();
+
+            await connection.OpenAsync();
+
+            string query = "INSERT INTO products (id, name, description, price, stock) VALUES (@id, @name, @description, @price, @stock)";
+
+            using MySqlCommand command = new MySqlCommand(query, connection);
+
+            newProduct.Id = _idGeneratorService.GenerateNextId("products");
+
+            command.Parameters.AddWithValue("@id", newProduct.Id);
+            command.Parameters.AddWithValue("@name", newProduct.Name);
+            command.Parameters.AddWithValue("@description", newProduct.Description);
+            command.Parameters.AddWithValue("@price", newProduct.Price);
+            command.Parameters.AddWithValue("@stock", newProduct.Stock);
+
+            await command.ExecuteNonQueryAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+
     }
 
     public Task DeleteProductAsync(int id)

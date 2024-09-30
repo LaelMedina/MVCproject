@@ -36,29 +36,13 @@ namespace MVCproyect.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product newProduct)
+        public async Task<IActionResult> Create(Product newProduct)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    using MySqlConnection connection = _context.CreateConnection();
-
-                    connection.Open();
-
-                    string query = "INSERT INTO products (id, name, description, price, stock) VALUES (@id, @name, @description, @price, @stock)";
-
-                    using MySqlCommand command = new MySqlCommand(query, connection);
-
-                    newProduct.Id = _idGeneratorService.GenerateNextId("products");
-
-                    command.Parameters.AddWithValue("@id", newProduct.Id);
-                    command.Parameters.AddWithValue("@name", newProduct.Name);
-                    command.Parameters.AddWithValue("@description", newProduct.Description);
-                    command.Parameters.AddWithValue("@price", newProduct.Price);
-                    command.Parameters.AddWithValue("@stock", newProduct.Stock);
-
-                    command.ExecuteNonQuery();
+                    await _productRepository.AddProductAsync(newProduct);
                 }
                 catch (Exception ex)
                 {
