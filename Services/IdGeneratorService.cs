@@ -27,9 +27,9 @@ namespace MVCproyect.Services
 
                 using MySqlCommand command = new MySqlCommand(query, connection);
 
-                var lastId = command.ExecuteScalarAsync();
+                var lastId = await command.ExecuteScalarAsync();
 
-                if (await lastId != DBNull.Value)
+                if (lastId != DBNull.Value)
                 {
                     newId = Convert.ToInt32(lastId) + 1;
                 }

@@ -31,7 +31,7 @@
 
             <div class="mb-3">
                 <label asp-for="Description" class="form-label">Description</label>
-                <textarea asp-for="Description" class="form-control" placeholder="Enter product description"></textarea>
+                <textarea asp-for="Description" class="form-control" placeholder="@currentProduct.Description"></textarea>
                 <div class="invalid-feedback">
                     <span asp-validation-for="Description"></span>
                 </div>
