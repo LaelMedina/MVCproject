@@ -1,31 +1,40 @@
 ﻿using System.Data;
+using MVCproyect.Interfaces;
 using MVCproyect.Models;
 using MVCproyect.Services;
 using MySql.Data.MySqlClient;
 
-public class UserService
+public class UserService : IUserService
 {
-    private readonly MySqlConnection _connection;
+    private readonly MySqlService _context;
 
-    public UserService(MySqlService connection)
+    public UserService(MySqlService context)
     {
-        _connection = connection.CreateConnection();
+        _context = context;
     }
 
-    public User? GetUserByUsername(string username)
+    public async Task<User> GetUserByNameAsync(string username)
     {
+
+        User user = new User();
+
         try
         {
-            _connection.Open();
+            using MySqlConnection connection = _context.CreateConnection();
+
+            await connection.OpenAsync();
+
             string query = "SELECT * FROM Users WHERE Username = @username";
-            MySqlCommand command = new MySqlCommand(query, _connection);
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            
             command.Parameters.AddWithValue("@username", username);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync())
             {
-                if (reader.Read())
+                if (await reader.ReadAsync())
                 {
-                    return new User
+                    return user = new User
                     {
                         UserId = reader.GetInt32("UserId"),
                         UserName = reader.GetString("Username"),
@@ -40,17 +49,13 @@ public class UserService
         { 
             Console.WriteLine(ex.Message);
         }
-        finally
-        {
-            _connection.Close();
-        }
 
-        return null;
+        return user;
     }
 
-    public bool ValidateUser(string username, string password)
+    public async Task<bool> ValidateUserAsync(string username, string password)
     {
-        User user = GetUserByUsername(username);
+        User user = await GetUserByNameAsync(username);
         if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
         {
             return true;
