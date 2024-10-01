@@ -17,11 +17,11 @@ public class LoginController : Controller
     }
 
     [HttpPost]
-    public IActionResult Login(User user)
+    public async Task<IActionResult> Login(User user)
     {
-        if (_userService.ValidateUser(user.UserName,user.PasswordHash))
+        if (await _userService.ValidateUserAsync(user.UserName,user.PasswordHash))
         {
-            user = _userService.GetUserByUsername(user.UserName);
+            user = await _userService.GetUserByNameAsync(user.UserName);
             HttpContext.Session.SetString("Username", user.UserName);
             HttpContext.Session.SetInt32("Role", user.RoleId);
             return RedirectToAction("Index", "Home");

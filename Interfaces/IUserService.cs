@@ -4,8 +4,8 @@ namespace MVCproyect.Interfaces
 {
     public interface IUserService
     {
-        Task<User> GetUserByName(string username);
+        Task<User> GetUserByNameAsync(string username);
 
-        Task<bool> ValidateUser(string username, string password);
+        Task<bool> ValidateUserAsync(string username, string password);
     }
 }
