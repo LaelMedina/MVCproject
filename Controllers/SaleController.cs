@@ -75,7 +75,7 @@ namespace MVCproyect.Controllers
                 {
                     await _saleRepository.AddSaleAsync(newSale);
 
-                    _productService.UpdateStockAfterSale(newSale.ProductSoldId, newSale.TotalUnits);
+                    await _productService.UpdateStockAfterSale(newSale.ProductSoldId, newSale.TotalUnits);
                 }
                 catch (Exception ex)
                 {

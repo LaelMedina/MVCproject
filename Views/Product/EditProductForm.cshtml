@@ -31,9 +31,9 @@
 
             <div class="mb-3">
                 <label asp-for="Description" class="form-label">Description</label>
-                <textarea asp-for="Description" class="form-control" placeholder="@currentProduct.Description"></textarea>
+                <input type="text" asp-for="Description" class="form-control" value="@currentProduct.Description"/>
                 <div class="invalid-feedback">
-                    <span asp-validation-for="Description"></span>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
                 <label asp-for="Stock" class="form-label">Stock</label>
                 <input type="number" asp-for="Stock" class="form-control" value="@currentProduct.Stock" />
                 <div class="invalid-feedback">
-                    <span asp-validation-for="Stock"></span>
+                    <span asp-validation-for="Stock" class="text-danger"></span>
                 </div>
             </div>
 
