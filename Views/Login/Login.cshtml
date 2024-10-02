@@ -14,28 +14,30 @@
             <h1 class="display-4 mb-4">Log In</h1>
 
             <div class="row justify-content-center mt-4">
-                <form method="post" asp-action="Login" class="p-4 border rounded bg-light shadow-sm">
+                <div class="col-md-4 col-sm-6">
+                    <form method="post" asp-action="Login" class="p-4 border rounded bg-light shadow-sm">
 
-                    <div class="mb-3">
-                        <label asp-for="UserName">Username:</label>
-                        <input type="text" asp-for="UserName" required />
-                    </div>
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label">Username:</label>
+                            <input type="text" asp-for="UserName" class="form-control" required />
+                        </div>
 
-                    <div class="mb-3">
-                        <label asp-for="PasswordHash">Password:</label>
-                        <input type="password" asp-for="PasswordHash" required />
-                    </div>
+                        <div class="mb-3">
+                            <label asp-for="PasswordHash" class="form-label">Password:</label>
+                            <input type="password" asp-for="PasswordHash" class="form-control" required />
+                        </div>
 
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
-                    </div>
-                </form>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                        </div>
+                    </form>
 
 
-                @if (ViewBag.ErrorMessage != null)
-                {
-                    <p style="color:red;">@ViewBag.ErrorMessage</p>
-                }
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p style="color:red;">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
             </div>
 
             <div class="mt-5">
