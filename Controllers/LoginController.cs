@@ -19,11 +19,11 @@ public class LoginController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(User user)
     {
-        if (await _userService.ValidateUserAsync(user.UserName,user.PasswordHash))
+        if(await _userService.ValidateUserAsync(user.UserName,user.PasswordHash))
         {
             user = await _userService.GetUserByNameAsync(user.UserName);
             HttpContext.Session.SetString("Username", user.UserName);
-            HttpContext.Session.SetInt32("Role", user.RoleId);
+            HttpContext.Session.SetInt32("UserRoleId", user.RoleId);
             return RedirectToAction("Index", "Home");
         }
         ViewBag.ErrorMessage = "Invalid credentials";
