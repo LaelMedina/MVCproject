@@ -1,5 +1,6 @@
 ﻿@{
     var sales = ViewData["Sales"] as List<MVCproyect.Models.Sale>;
+    var userRoleId = Context.Session.GetInt32("UserRoleId");
 }
 
 <!DOCTYPE html>
@@ -33,7 +34,12 @@
                         <th scope="col">Total Sale</th>
                         <th scope="col">Payment Method</th>
                         <th scope="col">Created At</th>
-                        <th scope="col">Action</th>
+
+                        @if (userRoleId == 1)
+                        {
+                            <th scope="col">Action</th>
+                        }
+
                     </tr>
                 </thead>
                 <tbody>
@@ -48,21 +54,24 @@
                             <td>@sale.TotalSale</td>
                             <td>@sale.PaymentMethod</td>
                             <td>@sale.CreatedAt</td>
-                            <td>
+                            @if (userRoleId == 1)
+                            {
+                                <td>
 
-                                <!--
-                                <form asp-action="Update" method="post" style="display:inline">
-                                    <input type="hidden" name="id" value="@sale.Id" />
-                                    <button class="btn btn-outline-primary btn-sm">Edit</button>
-                                </form>
-                                -->
+                                    <!--
+                                    <form asp-action="Update" method="post" style="display:inline">
+                                        <input type="hidden" name="id" value="@sale.Id" />
+                                        <button class="btn btn-outline-primary btn-sm">Edit</button>
+                                    </form>
+                                    -->
 
-                                <form asp-action="Delete" method="post" style="display:inline">
-                                    <input type="hidden" name="id" value="@sale.Id" />
-                                    <button class="btn btn-outline-danger btn-sm">Delete</button>
-                                </form>
+                                    <form asp-action="Delete" method="post" style="display:inline">
+                                        <input type="hidden" name="id" value="@sale.Id" />
+                                        <button class="btn btn-outline-danger btn-sm">Delete</button>
+                                    </form>
 
-                            </td>
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>
