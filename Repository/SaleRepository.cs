@@ -135,9 +135,26 @@ namespace MVCproyect.Repository
             throw new NotImplementedException();
         }
 
-        public Task DeleteSaleAsync(int id)
+        public async Task DeleteSaleAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
+
+                string query = "DELETE FROM sales WHERE id=@id";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@id", id);
+
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

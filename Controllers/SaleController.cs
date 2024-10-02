@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MVCproyect.Interfaces;
 using MVCproyect.Models;
 using MVCproyect.Repository;
 using MVCproyect.Services;
@@ -105,23 +106,21 @@ namespace MVCproyect.Controllers
             }
         }
 
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _saleRepository.DeleteSaleAsync(id);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
             }
+
+            return RedirectToAction("Index");
         }
     }
 }
