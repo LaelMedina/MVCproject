@@ -87,23 +87,52 @@ namespace MVCproyect.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Edit(int id)
+        [HttpPost]
+        public async Task<IActionResult> Update(int id)
         {
-            return View();
+            try
+            {
+                Sale sale = await _saleRepository.GetSaleByIdAsync(id);
+
+                ViewBag.currentSale = sale;
+
+                List<Product> products = await _productService.GetProductsAsync();
+
+                List<PaymentMethod> paymentMethods = await _saleService.GetPaymentMethodsAsync();
+
+                ViewData["products"] = products;
+
+                ViewData["paymentMethods"] = paymentMethods;
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
+            }
+
+            return View("EditSaleForm");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> UpdateSale(Sale updatedSale)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _saleRepository.UpdateSaleAsync(updatedSale);
+
+                    ViewData["Sales"] = updatedSale;
+                }
+                catch(Exception ex)
+                {
+                    ViewBag.ErrorMessage = "An error has occured: " + ex.Message.ToString() + "Sale Id: " + updatedSale.Id;
+                    return View("ErrorView");
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

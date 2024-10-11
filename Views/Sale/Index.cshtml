@@ -58,12 +58,12 @@
                             {
                                 <td>
 
-                                    <!--
+                                    
                                     <form asp-action="Update" method="post" style="display:inline">
                                         <input type="hidden" name="id" value="@sale.Id" />
                                         <button class="btn btn-outline-primary btn-sm">Edit</button>
                                     </form>
-                                    -->
+                                   
 
                                     <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this sale?');">
                                         <input type="hidden" name="id" value="@sale.Id" />
