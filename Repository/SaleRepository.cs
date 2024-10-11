@@ -130,9 +130,32 @@ namespace MVCproyect.Repository
             }
         }
 
-        public Task UpdateSaleAsync(Sale newSale)
+        public async Task UpdateSaleAsync(Sale updatedSale)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
+
+                string query = "UPDATE sales SET clientname = @ClientName, salecontent = @SaleContent, productsoldid = @ProductSoldId, totalunits = @TotalUnits, totalsale = @TotalSale, paymentmethod = @PaymentMethod WHERE id = @Id";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@Id", updatedSale.Id);
+                command.Parameters.AddWithValue("@ClientName", updatedSale.ClientName);
+                command.Parameters.AddWithValue("@SaleContent", updatedSale.SaleContent);
+                command.Parameters.AddWithValue("@ProductSoldId", updatedSale.ProductSoldId);
+                command.Parameters.AddWithValue("@TotalUnits", updatedSale.TotalUnits);
+                command.Parameters.AddWithValue("@TotalSale", updatedSale.TotalSale);
+                command.Parameters.AddWithValue("@PaymentMethod", updatedSale.PaymentMethod);
+
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         public async Task DeleteSaleAsync(int id)
