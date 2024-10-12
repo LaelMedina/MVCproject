@@ -57,14 +57,14 @@
                             @if (userRoleId == 1)
                             {
                                 <td>
+                                     <form asp-action="Update" method="post" style="display:inline">
+                                        <input type="hidden" name="id" value="@product.Id" />
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
+                                    </form>
+
                                     <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                         <input type="hidden" name="id" value="@product.Id" />
                                         <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                                    </form>
-
-                                    <form asp-action="Update" method="post" style="display:inline">
-                                        <input type="hidden" name="id" value="@product.Id" />
-                                        <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
                                     </form>
                                 </td>
                             }
