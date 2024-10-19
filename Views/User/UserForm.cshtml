@@ -1,0 +1,82 @@
+﻿@model MVCproyect.Models.User;
+
+@{
+    var UserRoles = ViewData["UserRoles"] as List<MVCproyect.Models.Role>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add User</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div class="container mt-5">
+
+        <header class="text-center mb-4">
+            <h1 class="display-4">Add User</h1>
+        </header>
+
+        <form asp-action="Create" method="post" class="p-4 border rounded bg-light shadow-sm">
+
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label">User Name</label>
+                <input type="text" asp-for="UserName" class="form-control" />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="UserName"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PasswordHash" class="form-label">Password</label>
+                <input type="password" id="txtPassword" asp-for="PasswordHash" class="form-control" value=""/>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="PasswordHash"></span>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="PasswordHash" class="form-label">Confirm Password</label>
+                <input type="password" id="txtConfirmPassword" asp-for="PasswordHash" class="form-control" value=""/>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="PasswordHash"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RoleId" class="form-label">Role</label>
+                <select asp-for="RoleId" id="roleContent" class="form-select" aria-label="Select Role">
+                <option value="" disabled selected>Choose the user role...</option>
+                @foreach (Role role in UserRoles)
+                {
+                    <option value="@role.RoleId">@role.RoleName</option>
+                }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" id="btnCreate" class="btn btn-primary btn-lg">Create</button>
+            </div>
+        </form>
+
+        <div class="mt-3">
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).on('click', '#btnCreate', function (event) {
+            if ($('#txtPassword').val() != $('#txtConfirmPassword').val()) 
+            {
+                event.preventDefault();
+                alert('Passwords do not match');
+            }
+        });
+    </script>
+
+</body>
+</html>
