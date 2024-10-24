@@ -97,21 +97,17 @@
         $(document).ready(function () {
             var selectedUserId = null;
 
-            // Manejar la selección de usuario
             $('.select-user').on('change', function () {
-                // Verificar si algún checkbox está seleccionado
                 var selectedCheckboxes = $('.select-user:checked');
 
                 if (selectedCheckboxes.length > 0) {
                     selectedUserId = $(this).data('id');
 
-                    // Asignar el id seleccionado a los campos ocultos de los formularios
                     $('#editUserId').val(selectedUserId);
                     $('#deleteUserId').val(selectedUserId);
                 } else {
                     selectedUserId = null;
 
-                    // Limpiar los valores de los campos ocultos
                     $('#editUserId').val('');
                     $('#deleteUserId').val('');
                 }

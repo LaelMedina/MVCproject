@@ -19,8 +19,9 @@ namespace MVCproyect.Controllers
         private readonly ProductService _productService;
         private readonly SaleService _saleService;
         private readonly SaleRepository _saleRepository;
+        private readonly UserRepository _userRepository;
 
-        public SaleController(MySqlService context, SaleRepository saleRepository)
+        public SaleController(MySqlService context, SaleRepository saleRepository, UserRepository userRepository)
         {
             _context = context;
             _sales = new List<Sale>();
@@ -28,12 +29,25 @@ namespace MVCproyect.Controllers
             _productService = new ProductService(_context);
             _saleService = new SaleService(_context);
             _saleRepository = saleRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<ActionResult> Index()
         {
             try
             {
+                int? loggedUserId = HttpContext.Session.GetInt32("UserId");
+                List<Role> rolesList = new List<Role>();
+
+                if (loggedUserId == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+
+                User loggedUser = await _userRepository.GetUserByIdAsync(loggedUserId.Value);
+
+                ViewData["LoggedUser"] = loggedUser;
+
                 _sales = await _saleRepository.GetSalesAsync();
             }
             catch (Exception ex)

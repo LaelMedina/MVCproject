@@ -4,6 +4,7 @@ using MVCproyect.Models;
 using System.Data;
 using MVCproyect.Services;
 using MVCproyect.Interfaces;
+using MVCproyect.Repository;
 
 namespace MVCproyect.Controllers
 {
@@ -12,18 +13,37 @@ namespace MVCproyect.Controllers
         private readonly MySqlService _context;
         private readonly ProductRepository _productRepository;
         private List<Product> _products;
+        private readonly UserRepository _userRepository;
 
-        public ProductController(MySqlService context, IdGeneratorService idGeneratorService, ProductRepository productRepository)
+        public ProductController(
+            MySqlService context, 
+            IdGeneratorService idGeneratorService, 
+            ProductRepository productRepository,
+            UserRepository userRepository)
         {
             _context = context;
             _products = new List<Product>();
             _productRepository = productRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<IActionResult> Index()
         {
             _products = await _productRepository.GetProductsAsync();
             ViewData["Products"] = _products;
+
+            int? loggedUserId = HttpContext.Session.GetInt32("UserId");
+            List<Role> rolesList = new List<Role>();
+
+            if (loggedUserId == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            User loggedUser = await _userRepository.GetUserByIdAsync(loggedUserId.Value);
+
+            ViewData["LoggedUser"] = loggedUser;
+
             return View();
         }
 
