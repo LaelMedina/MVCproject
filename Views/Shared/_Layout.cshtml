@@ -28,16 +28,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Sale" asp-action="Index">Sales Manager</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Index">Products List</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Logout" onclick="return confirm('Are you sure you want to logout from this account?')">Logout</a>
-                            </li>
                         </ul>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownSessionButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Session
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownSessionButton1">
+                                <li><a class="dropdown-item" asp-area"" asp-controller="User" asp-action="Index">Users List</a></li>
+                                <li><a class="dropdown-item" href="#">Change Password</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout" onclick="return confirm('Are you sure you want to logout from this account?')">Log out</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
