@@ -24,6 +24,7 @@ public class LoginController : Controller
             user = await _userService.GetUserByNameAsync(user.UserName);
             HttpContext.Session.SetString("Username", user.UserName);
             HttpContext.Session.SetInt32("UserRoleId", user.RoleId);
+            HttpContext.Session.SetInt32("UserId", user.UserId);
             return RedirectToAction("Index", "Home");
         }
         ViewBag.ErrorMessage = "Invalid credentials";
