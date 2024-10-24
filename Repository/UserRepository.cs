@@ -10,7 +10,7 @@ namespace MVCproyect.Repository
     {
         private readonly MySqlService _context;
         private readonly UserService _userService;
-        public UserRepository(MySqlService context, UserService userService) 
+        public UserRepository(MySqlService context, UserService userService)
         {
             _context = context;
             _userService = userService;
@@ -41,14 +41,64 @@ namespace MVCproyect.Repository
             }
         }
 
-        public Task DeleteUserAsync(int id)
+        public async Task DeleteUserAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
+
+                string query = "DELETE FROM users WHERE UserId=@id";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@id", id);
+
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        public Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            User user = new User();
+
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
+
+                string query = "SELECT UserId, Username, PasswordHash, RoleId FROM Users WHERE UserId=@id";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@id", id);
+
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync())
+                {
+                    user = new User
+                    {
+                        UserId = reader.GetInt32("UserId"),
+                        UserName = reader.GetString("Username"),
+                        PasswordHash = reader.GetString("PasswordHash"),
+                        RoleId = reader.GetInt32("RoleId")
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return user;
         }
 
         public async Task<List<User>> GetUsersAsync()

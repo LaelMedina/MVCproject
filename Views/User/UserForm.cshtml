@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add User</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="\Views\User\user.js"></script>
 </head>
 <body>
 
@@ -47,7 +48,7 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="RoleId" class="form-label">Role</label>
+                <label asp-for="RoleId" class="form-label">User Role</label>
                 <select asp-for="RoleId" id="roleContent" class="form-select" aria-label="Select Role">
                 <option value="" disabled selected>Choose the user role...</option>
                 @foreach (Role role in UserRoles)

@@ -2,6 +2,7 @@
 using MVCproyect.Interfaces;
 using MVCproyect.Models;
 using MVCproyect.Repository;
+using MySqlX.XDevAPI;
 
 namespace MVCproyect.Controllers
 {
@@ -19,8 +20,26 @@ namespace MVCproyect.Controllers
 
         public async Task<IActionResult> Index()
         {
+            int? loggedUserId = HttpContext.Session.GetInt32("UserId");
+            List<Role> rolesList = new List<Role>();
+
+            if (loggedUserId == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            User loggedUser = await _userRepository.GetUserByIdAsync(loggedUserId.Value);
+
             _usersList = await _userRepository.GetUsersAsync();
+
+            rolesList = await _userService.GetUsersRolesAsync();
+
             ViewData["usersList"] = _usersList;
+
+            ViewData["LoggedUser"] = loggedUser;
+
+            ViewData["rolesList"] = rolesList; 
+
             return View();
         }
 
@@ -53,10 +72,31 @@ namespace MVCproyect.Controllers
             return RedirectToAction("Index");
         }
 
-        //public async Task<IActionResult> GetProductById(int id)
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            User user = await _userRepository.GetUserByIdAsync(id);
+            return View("UserForm");
+        }
+
+        //public async Task<IActionResult> Update() 
         //{
-        //    Product product = await _productRepository.GetProductByIdAsync(id);
-        //    return View("Product");
+            
         //}
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _userRepository.DeleteUserAsync(id);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
