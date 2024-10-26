@@ -7,13 +7,13 @@ namespace MVCproyect.Models
         [Key]
         public int UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "The user name is required")]
         public string UserName { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "The user password is required")]
         public string PasswordHash { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "The user role is required")]
         public int RoleId { get; set; }
 
     }

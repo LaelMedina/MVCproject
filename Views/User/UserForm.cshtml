@@ -10,8 +10,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add User</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="\Views\User\user.js"></script>
 </head>
 <body>
 
@@ -26,36 +24,31 @@
             <div class="mb-3">
                 <label asp-for="UserName" class="form-label">User Name</label>
                 <input type="text" asp-for="UserName" class="form-control" />
-                <div class="invalid-feedback">
-                    <span asp-validation-for="UserName"></span>
-                </div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="PasswordHash" class="form-label">Password</label>
-                <input type="password" id="txtPassword" asp-for="PasswordHash" class="form-control" value=""/>
-                <div class="invalid-feedback">
-                    <span asp-validation-for="PasswordHash"></span>
-                </div>
+                <input type="password" id="txtPassword" asp-for="PasswordHash" class="form-control" value="" />
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
-            
+
             <div class="mb-3">
                 <label asp-for="PasswordHash" class="form-label">Confirm Password</label>
-                <input type="password" id="txtConfirmPassword" asp-for="PasswordHash" class="form-control" value=""/>
-                <div class="invalid-feedback">
-                    <span asp-validation-for="PasswordHash"></span>
-                </div>
+                <input type="password" id="txtConfirmPassword" asp-for="PasswordHash" class="form-control" value="" />
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="RoleId" class="form-label">User Role</label>
                 <select asp-for="RoleId" id="roleContent" class="form-select" aria-label="Select Role">
-                <option value="" disabled selected>Choose the user role...</option>
-                @foreach (Role role in UserRoles)
-                {
-                    <option value="@role.RoleId">@role.RoleName</option>
-                }
+                    <option value="" disabled selected>Choose the user role...</option>
+                    @foreach (Role role in UserRoles)
+                    {
+                        <option value="@role.RoleId">@role.RoleName</option>
+                    }
                 </select>
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
@@ -71,8 +64,7 @@
 
     <script>
         $(document).on('click', '#btnCreate', function (event) {
-            if ($('#txtPassword').val() != $('#txtConfirmPassword').val()) 
-            {
+            if ($('#txtPassword').val() != $('#txtConfirmPassword').val()) {
                 event.preventDefault();
                 alert('Passwords do not match');
             }

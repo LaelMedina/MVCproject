@@ -24,36 +24,30 @@
             <div class="mb-3">
                 <label asp-for="Name" class="form-label">Name</label>
                 <input type="text" asp-for="Name" class="form-control" value="@currentProduct.Name" />
-                <div class="invalid-feedback">
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Description" class="form-label">Description</label>
-                <input type="text" asp-for="Description" class="form-control" value="@currentProduct.Description"/>
-                <div class="invalid-feedback">
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
+                <input type="text" asp-for="Description" class="form-control" value="@currentProduct.Description" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Stock" class="form-label">Stock</label>
                 <input type="number" asp-for="Stock" class="form-control" value="@currentProduct.Stock" />
-                <div class="invalid-feedback">
-                    <span asp-validation-for="Stock" class="text-danger"></span>
-                </div>
+                <span asp-validation-for="Stock" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Price" class="form-label">Price</label>
-                <input type="number" asp-for="Price" class="form-control" value="@currentProduct.Price"$ />
+                <input type="number" asp-for="Price" class="form-control" value="@currentProduct.Price" $ />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Id" class="form-label" hidden></label>
-                <input type="number" value="@currentProduct.Id" asp-for="Id" class="form-control" readonly hidden/>
+                <input type="number" value="@currentProduct.Id" asp-for="Id" class="form-control" readonly hidden />
             </div>
 
             <div class="mb-3">

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCproyect.Models
 {
@@ -7,24 +8,26 @@ namespace MVCproyect.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Client name is required.")]
+        [StringLength(100, ErrorMessage = "Client name cannot exceed 100 characters.")]
         public string ClientName { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Sale content is required.")]
         public string SaleContent { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Product sold ID is required.")]
         public int ProductSoldId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Total units are required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Total units must be at least 1.")]
         public int TotalUnits { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Total sale amount is required.")]
         public decimal TotalSale { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Payment method is required.")]
         public string PaymentMethod { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }
