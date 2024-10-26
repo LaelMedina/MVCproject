@@ -39,6 +39,13 @@
                 </div>
 
             </div>
+        }else
+        {
+            <div class="mb-4">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a asp-action="Create" value class="btn btn-outline-primary" id="btnNuevo">Insert Sale</a>
+                </div>
+            </div>
         }
 
         <div class="table-responsive">
@@ -73,7 +80,7 @@
                             <td>@sale.TotalSale</td>
                             <td>@sale.PaymentMethod</td>
                             <td>@sale.CreatedAt</td>
-                           
+
                             @if (userRoleId == 1)
                             {
                                 <td>
