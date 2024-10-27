@@ -18,6 +18,9 @@ namespace MVCproyect.Models
         [Range(1, double.MaxValue, ErrorMessage = "The price must be at least 1.")]
         public decimal Price { get; set; }
 
+        //This property can not be changed so far.
+        public int Currency { get; set; }
+
         [Required(ErrorMessage = "The amount of units of the product must be specified.")]
         [Range(1, int.MaxValue, ErrorMessage = "Total units must be at least 1.")]
         public int Stock { get; set; }

@@ -39,7 +39,7 @@
                         <div class="col-md-8 mb-3">
                             <label asp-for="SaleContent" class="form-label">Sale Content</label>
                             <select asp-for="SaleContent" id="saleContent" class="form-select" aria-label="Select product">
-                                <option value="@currentSale.ProductSoldId" selected class="text-muted fst-itali">@currentSale.SaleContent</option>
+                                <option value="@currentSale.SaleContent" selected class="text-muted fst-itali">@currentSale.SaleContent</option>
                                 @foreach (Product product in products)
                                 {
                                     <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>

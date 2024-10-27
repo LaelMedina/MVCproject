@@ -39,6 +39,7 @@ public class ProductRepository : IProductRepository
                         Name = reader.GetString("name"),
                         Description = reader.GetString("description"),
                         Price = reader.GetDecimal("price"),
+                        Currency = reader.GetInt32("currency"),
                         Stock = reader.GetInt32("stock"),
                         CreatedAt = reader.GetDateTime("CreatedAt")
                     });
@@ -81,6 +82,7 @@ public class ProductRepository : IProductRepository
                     Name = reader.GetString("name"),
                     Description = reader.GetString("description"),
                     Price = reader.GetDecimal("price"),
+                    Currency = reader.GetInt32("currency"),
                     Stock = reader.GetInt32("stock"),
                     CreatedAt = reader.GetDateTime("CreatedAt")
                 };
@@ -104,7 +106,7 @@ public class ProductRepository : IProductRepository
 
             await connection.OpenAsync();
 
-            string query = "INSERT INTO products (id, name, description, price, stock) VALUES (@id, @name, @description, @price, @stock)";
+            string query = "INSERT INTO products (id, name, description, price, currency, stock) VALUES (@id, @name, @description, @price, @currency, @stock)";
 
             using MySqlCommand command = new MySqlCommand(query, connection);
 
@@ -114,6 +116,7 @@ public class ProductRepository : IProductRepository
             command.Parameters.AddWithValue("@name", newProduct.Name);
             command.Parameters.AddWithValue("@description", newProduct.Description);
             command.Parameters.AddWithValue("@price", newProduct.Price);
+            command.Parameters.AddWithValue("@currency", 1); //Default currency is dollars
             command.Parameters.AddWithValue("@stock", newProduct.Stock);
 
             await command.ExecuteNonQueryAsync();

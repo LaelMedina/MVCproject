@@ -12,19 +12,24 @@ namespace MVCproyect.Controllers
     {
         private readonly MySqlService _context;
         private readonly ProductRepository _productRepository;
-        private List<Product> _products;
         private readonly UserRepository _userRepository;
+        private readonly SaleService _saleService;
+        private List<Product> _products;
+        private List<Currency> _currencies;
+
 
         public ProductController(
             MySqlService context, 
             IdGeneratorService idGeneratorService, 
             ProductRepository productRepository,
-            UserRepository userRepository)
+            UserRepository userRepository,
+            SaleService saleService)
         {
             _context = context;
             _products = new List<Product>();
             _productRepository = productRepository;
             _userRepository = userRepository;
+            _saleService = saleService;
         }
 
         public async Task<IActionResult> Index()
@@ -42,7 +47,11 @@ namespace MVCproyect.Controllers
 
             User loggedUser = await _userRepository.GetUserByIdAsync(loggedUserId.Value);
 
+            _currencies = await _saleService.GetCurrenciesAsync();
+
             ViewData["LoggedUser"] = loggedUser;
+
+            ViewData["Currencies"] = _currencies;
 
             return View();
         }

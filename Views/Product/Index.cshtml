@@ -3,6 +3,7 @@
     var userRoleId = Context.Session.GetInt32("UserRoleId");
     var loggedUser = ViewData["LoggedUser"] as MVCproyect.Models.User;
     var rolesList = ViewData["rolesList"] as List<MVCproyect.Models.Role>;
+    var currencies = ViewData["Currencies"] as List<MVCproyect.Models.Currency>;
 }
 
 <!DOCTYPE html>
@@ -65,7 +66,12 @@
                             <td>@product.Id</td>
                             <td>@product.Name</td>
                             <td>@product.Description</td>
-                            <td>@product.Price$</td>
+                            <td>
+                                @{
+                                    var CurrencyAcronym = currencies.FirstOrDefault(currency => currency.Id == product.Currency);
+                                }
+                                @product.Price @CurrencyAcronym.Acronym
+                            </td>
                             <td>@product.Stock</td>
                             <td>@product.CreatedAt</td>
 
