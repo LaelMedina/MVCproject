@@ -25,6 +25,9 @@ namespace MVCproyect.Models
         [Required(ErrorMessage = "Total sale amount is required.")]
         public decimal TotalSale { get; set; }
 
+        [Required(ErrorMessage = "Currency is required")]
+        public int Currency { get; set; }
+
         [Required(ErrorMessage = "Payment method is required.")]
         public string PaymentMethod { get; set; } = string.Empty;
 

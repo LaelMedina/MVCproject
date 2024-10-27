@@ -3,6 +3,7 @@
     var userRoleId = Context.Session.GetInt32("UserRoleId");
     var loggedUser = ViewData["LoggedUser"] as MVCproyect.Models.User;
     var rolesList = ViewData["rolesList"] as List<MVCproyect.Models.Role>;
+    var currencies = ViewData["Currencies"] as List<MVCproyect.Models.Currency>;
 }
 
 <!DOCTYPE html>
@@ -11,7 +12,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales History</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -58,6 +58,7 @@
                         <th scope="col">Sale Content</th>
                         <th scope="col">Total Units</th>
                         <th scope="col">Total Sale</th>
+                        <th scope="col">Currency</th>
                         <th scope="col">Payment Method</th>
                         <th scope="col">Created At</th>
 
@@ -78,9 +79,17 @@
                             <td>@sale.SaleContent</td>
                             <td>@sale.TotalUnits</td>
                             <td>@sale.TotalSale</td>
+
+                            <td>
+                                @{
+                                    var saleCurrency = currencies.FirstOrDefault(currency => currency.Id == sale.Currency);
+                                }
+                                @saleCurrency.CurrencyName
+                            </td>
+
                             <td>@sale.PaymentMethod</td>
                             <td>@sale.CreatedAt</td>
-
+                            
                             @if (userRoleId == 1)
                             {
                                 <td>

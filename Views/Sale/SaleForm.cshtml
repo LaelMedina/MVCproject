@@ -3,6 +3,7 @@
 @{
     var products = ViewData["products"] as List<MVCproyect.Models.Product>;
     var paymentMethods = ViewData["paymentMethods"] as List<MVCproyect.Models.PaymentMethod>;
+    var currencies = ViewData["Currencies"] as List<MVCproyect.Models.Currency>;
 }
 
 <!DOCTYPE html>
@@ -20,67 +21,90 @@
             <h1 class="display-5">Insert New Sale</h1>
         </header>
 
-        <form asp-controller="Sale" asp-action="Create" method="post" class="border p-4 shadow-sm bg-light rounded">
+        <div class="row justify-content-center mt-4">
 
-            <div class="mb-3">
-                <label asp-for="ClientName" class="form-label">Client Name</label>
-                <input type="text" asp-for="ClientName" class="form-control" placeholder="Enter client name" />
-                <span asp-validation-for="ClientName" class="text-danger"></span>
-            </div>
+            <div class="col-md-4 col-md-6">
 
-            <div class="row">
-                <div class="col-md-8 mb-3">
-                    <label asp-for="SaleContent" class="form-label">Sale Content</label>
-                    <select asp-for="SaleContent" id="saleContent" class="form-select" aria-label="Select product">
-                        <option value="" disabled selected>Choose product...</option>
-                        @foreach (Product product in products)
-                        {
-                            <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="SaleContent" class="text-danger"></span>
+                <form asp-controller="Sale" asp-action="Create" method="post" class="border p-4 shadow-sm bg-light rounded">
+
+                    <div class="mb-3">
+                        <label asp-for="ClientName" class="form-label">Client Name</label>
+                        <input type="text" asp-for="ClientName" class="form-control" placeholder="Enter client name" />
+                        <span asp-validation-for="ClientName" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="SaleContent" class="form-label">Sale Content</label>
+                            <select asp-for="SaleContent" id="saleContent" class="form-select" aria-label="Select product">
+                                <option value="" disabled selected>Choose product...</option>
+                                @foreach (Product product in products)
+                                {
+                                    <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="SaleContent" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="TotalUnits" class="form-label">Total Units</label>
+                            <input id="totalUnits" type="number" asp-for="TotalUnits" class="form-control" placeholder="Enter units" min="1" />
+                            <span asp-validation-for="TotalUnits" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
+                            <select asp-for="PaymentMethod" class="form-select" aria-label="Select payment method">
+                                <option value="" disabled selected>Choose payment method...</option>
+                                @foreach (PaymentMethod paymentMethod in paymentMethods)
+                                {
+                                    <option value="@paymentMethod.Name">@paymentMethod.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Currency" class="form-label">Currency</label>
+                            <select asp-for="Currency" class="form-select" aria-label="Select currency">
+                                <option value="" disabled selected>Choose currency...</option>
+                                @foreach (Currency currencie in currencies)
+                                {
+                                    <option value="@currencie.Id">@currencie.CurrencyName</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Currency" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="TotalSale" class="form-label">Total Sale</label>
+                            <input type="text" id="totalSale" asp-for="TotalSale" class="form-control" readonly />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="ProductSoldId" class="form-label" hidden></label>
+                            <input type="number" id="productSoldId" asp-for="ProductSoldId" class="form-control" readonly hidden />
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Sale</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Sales List</a>
                 </div>
 
-                <div class="col-md-4 mb-3">
-                    <label asp-for="TotalUnits" class="form-label">Total Units</label>
-                    <input id="totalUnits" type="number" asp-for="TotalUnits" class="form-control" placeholder="Enter units" min="1" />
-                    <span asp-validation-for="TotalUnits" class="text-danger"></span>
-                </div>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
-                <select asp-for="PaymentMethod" class="form-select" aria-label="Select payment method">
-                    <option value="" disabled selected>Choose payment method...</option>
-                    @foreach (PaymentMethod paymentMethod in paymentMethods)
-                    {
-                        <option value="@paymentMethod.Name">@paymentMethod.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label asp-for="TotalSale" class="form-label">Total Sale</label>
-                    <input type="text" id="totalSale" asp-for="TotalSale" class="form-control" readonly />
-                </div>
-
-                <div class="col-md-6">
-                    <label asp-for="ProductSoldId" class="form-label" hidden></label>
-                    <input type="number" id="productSoldId" asp-for="ProductSoldId" class="form-control" readonly hidden />
-                </div>
-            </div>
-
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg">Save Sale</button>
-            </div>
-        </form>
-
-        <div class="text-center mt-3">
-            <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Sales List</a>
         </div>
-
     </div>
 
     <script>

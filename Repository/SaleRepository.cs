@@ -43,6 +43,7 @@ namespace MVCproyect.Repository
                             ProductSoldId = reader.GetInt32("ProductSoldId"),
                             TotalUnits = reader.GetInt32("TotalUnits"),
                             TotalSale = reader.GetDecimal("TotalSale"),
+                            Currency = reader.GetInt32("Currency"),
                             PaymentMethod = reader.GetString("PaymentMethod"),
                             CreatedAt = reader.GetDateTime("CreatedAt")
                         });
@@ -86,6 +87,7 @@ namespace MVCproyect.Repository
                         ProductSoldId = reader.GetInt32("ProductSoldId"),
                         TotalUnits = reader.GetInt32("TotalUnits"),
                         TotalSale = reader.GetDecimal("TotalSale"),
+                        Currency = reader.GetInt32("Currency"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
                         CreatedAt = reader.GetDateTime("CreatedAt")
                     };
@@ -108,7 +110,7 @@ namespace MVCproyect.Repository
 
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO sales (id, clientname, salecontent, productsoldid, totalunits, totalsale, paymentmethod) VALUES (@Id, @ClientName, @SaleContent, @ProductSoldId,@TotalUnits, @TotalSale, @PaymentMethod)";
+                string query = "INSERT INTO sales (id, clientname, salecontent, productsoldid, totalunits, totalsale, Currency, paymentmethod) VALUES (@Id, @ClientName, @SaleContent, @ProductSoldId, @TotalUnits, @TotalSale, @Currency, @PaymentMethod)";
 
                 using MySqlCommand command = new MySqlCommand(query, connection);
 
@@ -120,6 +122,7 @@ namespace MVCproyect.Repository
                 command.Parameters.AddWithValue("@ProductSoldId", newSale.ProductSoldId);
                 command.Parameters.AddWithValue("@TotalUnits", newSale.TotalUnits);
                 command.Parameters.AddWithValue("@TotalSale", newSale.TotalSale);
+                command.Parameters.AddWithValue("@Currency", newSale.Currency);
                 command.Parameters.AddWithValue("@PaymentMethod", newSale.PaymentMethod);
 
                 await command.ExecuteNonQueryAsync();
@@ -138,7 +141,7 @@ namespace MVCproyect.Repository
 
                 await connection.OpenAsync();
 
-                string query = "UPDATE sales SET clientname = @ClientName, salecontent = @SaleContent, productsoldid = @ProductSoldId, totalunits = @TotalUnits, totalsale = @TotalSale, paymentmethod = @PaymentMethod WHERE id = @Id";
+                string query = "UPDATE sales SET clientname = @ClientName, salecontent = @SaleContent, productsoldid = @ProductSoldId, totalunits = @TotalUnits, totalsale = @TotalSale, Currency = @Currency, paymentmethod = @PaymentMethod WHERE id = @Id";
 
                 using MySqlCommand command = new MySqlCommand(query, connection);
 
@@ -148,6 +151,7 @@ namespace MVCproyect.Repository
                 command.Parameters.AddWithValue("@ProductSoldId", updatedSale.ProductSoldId);
                 command.Parameters.AddWithValue("@TotalUnits", updatedSale.TotalUnits);
                 command.Parameters.AddWithValue("@TotalSale", updatedSale.TotalSale);
+                command.Parameters.AddWithValue("@Currency", updatedSale.Currency);
                 command.Parameters.AddWithValue("@PaymentMethod", updatedSale.PaymentMethod);
 
                 await command.ExecuteNonQueryAsync();

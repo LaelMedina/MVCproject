@@ -14,22 +14,24 @@ namespace MVCproyect.Controllers
     {
 
         private readonly MySqlService _context;
-        private List<Sale> _sales;
         private readonly IdGeneratorService _idGeneratorService;
         private readonly ProductService _productService;
         private readonly SaleService _saleService;
         private readonly SaleRepository _saleRepository;
         private readonly UserRepository _userRepository;
+        private List<Sale> _sales;
+        private List<Currency> _currencies;
 
         public SaleController(MySqlService context, SaleRepository saleRepository, UserRepository userRepository)
         {
             _context = context;
-            _sales = new List<Sale>();
             _idGeneratorService = new IdGeneratorService(_context);
             _productService = new ProductService(_context);
             _saleService = new SaleService(_context);
             _saleRepository = saleRepository;
             _userRepository = userRepository;
+            _sales = new List<Sale>();
+            _currencies = new List<Currency>();
         }
 
         public async Task<ActionResult> Index()
@@ -49,6 +51,8 @@ namespace MVCproyect.Controllers
                 ViewData["LoggedUser"] = loggedUser;
 
                 _sales = await _saleRepository.GetSalesAsync();
+
+                _currencies = await _saleService.GetCurrenciesAsync();
             }
             catch (Exception ex)
             {
@@ -56,6 +60,7 @@ namespace MVCproyect.Controllers
             }
 
             ViewData["Sales"] = _sales;
+            ViewData["Currencies"] = _currencies;
 
             return View();
         }
@@ -72,9 +77,15 @@ namespace MVCproyect.Controllers
 
             List<PaymentMethod> paymentMethods = await _saleService.GetPaymentMethodsAsync();
 
+            _currencies = await _saleService.GetCurrenciesAsync();
+
+
             ViewData["products"] = products;
 
             ViewData["paymentMethods"] = paymentMethods;
+
+            ViewData["Currencies"] = _currencies;
+
 
             return View("SaleForm");
         }
@@ -114,9 +125,14 @@ namespace MVCproyect.Controllers
 
                 List<PaymentMethod> paymentMethods = await _saleService.GetPaymentMethodsAsync();
 
+                _currencies = await _saleService.GetCurrenciesAsync();
+
                 ViewData["products"] = products;
 
                 ViewData["paymentMethods"] = paymentMethods;
+
+                ViewData["Currencies"] = _currencies;
+
 
             }
             catch (Exception ex)
