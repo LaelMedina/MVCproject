@@ -71,6 +71,10 @@
               "target": "Package",
               "version": "[6.11.0, )"
             },
+            "SpreadsheetLight": {
+              "target": "Package",
+              "version": "[3.5.0, )"
+            },
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.8.6, )"
