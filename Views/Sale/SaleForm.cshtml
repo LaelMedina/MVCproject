@@ -23,7 +23,7 @@
 
         <div class="row justify-content-center mt-4">
 
-            <div class="col-md-4 col-md-6">
+            <div class="col-md-8">
 
                 <form asp-controller="Sale" asp-action="Create" method="post" class="border p-4 shadow-sm bg-light rounded">
 
@@ -35,21 +35,24 @@
 
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label asp-for="SaleContent" class="form-label">Sale Content</label>
-                            <select asp-for="SaleContent" id="saleContent" class="form-select" aria-label="Select product">
+                            <label class="form-label">Sale Content</label>
+                            <select asp-for="SaleDetails" id="saleContent" class="form-select" aria-label="Select product">
                                 <option value="" disabled selected>Choose product...</option>
                                 @foreach (Product product in products)
                                 {
                                     <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>
                                 }
                             </select>
-                            <span asp-validation-for="SaleContent" class="text-danger"></span>
                         </div>
 
-                        <div class="col-md-4 mb-3">
-                            <label asp-for="TotalUnits" class="form-label">Total Units</label>
-                            <input id="totalUnits" type="number" asp-for="TotalUnits" class="form-control" placeholder="Enter units" min="1" />
-                            <span asp-validation-for="TotalUnits" class="text-danger"></span>
+                        <div class="col-md-2 mb-3">
+                            <label asp-for="SaleDetails" class="form-label">Total Units</label>
+                            <input id="totalUnits" type="number" asp-for="SaleDetails" class="form-control" placeholder="Enter units" min="1" />
+                        </div>
+
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Action</label>
+                            <button type="button" id="addToCart" class="btn btn-secondary w-100">Add to Cart</button>
                         </div>
                     </div>
 
@@ -81,16 +84,10 @@
 
                     </div>
 
-
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label asp-for="TotalSale" class="form-label">Total Sale</label>
-                            <input type="text" id="totalSale" asp-for="TotalSale" class="form-control" readonly />
-                        </div>
-
-                        <div class="col-md-6">
-                            <label asp-for="ProductSoldId" class="form-label" hidden></label>
-                            <input type="number" id="productSoldId" asp-for="ProductSoldId" class="form-control" readonly hidden />
+                            <input type="hidden" id="totalSale" asp-for="TotalSale" class="form-control" readonly />
+                            <input type="hidden" name="CartJson" id="CartJson" />
                         </div>
                     </div>
 
@@ -104,27 +101,75 @@
                 </div>
 
             </div>
+
+            <div id="cartDiv" class="col-md-4 border p-4 shadow-sm bg-light rounded">
+                <h3>Cart</h3>
+                <ul id="cartItems" class="list-group mb-3"></ul>
+                <h4>Total: <span id="cartTotal">0.00</span></h4>
+            </div>
+
         </div>
+
     </div>
 
     <script>
         $(document).ready(function () {
+            let cart = [];
+
+            function updateCartJson() {
+                $('#CartJson').val(JSON.stringify(cart));
+            }
 
             function calculateTotal() {
+                var total = 0;
+                cart.forEach(item => {
+                    total += item.price * item.units;
+                });
+                $('#totalSale').val(total.toFixed(2));
+                $('#cartTotal').text(total.toFixed(2));
+            }
+
+            $('#addToCart').on('click', function () {
+                var productId = $('#saleContent option:selected').data('id');
+                var productName = $('#saleContent option:selected').val();
                 var price = parseFloat($('#saleContent option:selected').data('price')) || 0;
                 var units = parseInt($('#totalUnits').val()) || 0;
-                var total = price * units;
-                $('#totalSale').val(total.toFixed(2));
-            }
 
-            function fnGetProductSoldId() {
-                var productId = parseInt($('#saleContent option:selected').data('id'));
-                $('#productSoldId').val(productId);
-            }
+                if (productName && units > 0) {
+                    const item = { productId, productName, price, units };
+                    cart.push(item);
 
-            $('#saleContent, #totalUnits').on('change keyup', function () {
+                    $('#cartItems').append(
+                        `<li class="list-group-item d-flex justify-content-between align-items-center" data-productid="${item.productId}">
+                            ${item.productName} - ${item.units} units x $${item.price.toFixed(2)}
+                            <span>$${(item.units * item.price).toFixed(2)}</span>
+                            <button class="btn btn-danger btn-sm remove-item">Remove</button>
+                        </li>`
+                    );
+
+                    calculateTotal();
+                    updateCartJson();
+                    $('#totalUnits').val('');
+                } else {
+                    alert("Please select a product and enter valid units.");
+                }
+            });
+
+            $(document).on('click', '.remove-item', function () {
+                const productId = $(this).closest('li').data('productid');
+                cart = cart.filter(item => item.productId !== productId);
+                $(this).closest('li').remove();
                 calculateTotal();
-                fnGetProductSoldId();
+                updateCartJson();
+            });
+
+            $('form').on('submit', function (event) {
+                if (cart.length === 0) {
+                    event.preventDefault();
+                    alert("Please add at least one item to the cart before submitting.");
+                } else {
+                    updateCartJson(); // Solo se llama si el carrito no está vacío
+                }
             });
         });
     </script>

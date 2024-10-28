@@ -54,39 +54,53 @@ public class ReportController : Controller
 
         return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
-
     [HttpGet]
     public async Task<IActionResult> GenerateSalesReportExcel()
     {
-        List<Sale> sales = await _saleRepository.GetSalesAsync();
+        List<Sale> sales = await _saleRepository.GetSalesWithDetailsAsync();
         var memoryStream = new MemoryStream();
 
         SLDocument sLDocument = new SLDocument();
         System.Data.DataTable dt = new System.Data.DataTable();
 
-        // Excel Columns
-        dt.Columns.Add("Id", typeof(int));
+        dt.Columns.Add("Sale Id", typeof(int));
         dt.Columns.Add("Client", typeof(string));
-        dt.Columns.Add("Product", typeof(string));
-        dt.Columns.Add("Units", typeof(int));
-        dt.Columns.Add("Total", typeof(decimal));
+        dt.Columns.Add("Total Sale", typeof(decimal));
+        dt.Columns.Add("Currency", typeof(int));
         dt.Columns.Add("Payment Method", typeof(string));
-        dt.Columns.Add("Date", typeof(string));
+        dt.Columns.Add("Sale Date", typeof(string));
+        dt.Columns.Add("Product Name", typeof(string));
+        dt.Columns.Add("Units", typeof(int));
+        dt.Columns.Add("Price", typeof(decimal));
+        dt.Columns.Add("Total Price", typeof(decimal));
 
-        // Excel Data Rows
         foreach (Sale sale in sales)
         {
-            dt.Rows.Add(sale.Id, sale.ClientName, sale.SaleContent, sale.TotalUnits, sale.TotalSale, sale.PaymentMethod, sale.CreatedAt);
+            foreach (var detail in sale.SaleDetails)
+            {
+                dt.Rows.Add(
+                    sale.Id,
+                    sale.ClientName,
+                    sale.TotalSale,
+                    sale.Currency,
+                    sale.PaymentMethod,
+                    sale.CreatedAt,
+                    detail.ProductName,
+                    detail.Units,
+                    detail.Price,
+                    sale.TotalSale
+                );
+            }
         }
 
         sLDocument.ImportDataTable(1, 1, dt, true);
         sLDocument.SaveAs(memoryStream);
 
-        // Rewind the stream position to the beginning before returning it
         memoryStream.Position = 0;
 
         string fileName = $"SalesReport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
 
         return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
+
 }

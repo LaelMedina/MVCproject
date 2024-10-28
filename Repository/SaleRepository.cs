@@ -39,9 +39,6 @@ namespace MVCproyect.Repository
                         {
                             Id = reader.GetInt32("Id"),
                             ClientName = reader.GetString("ClientName"),
-                            SaleContent = reader.GetString("SaleContent"),
-                            ProductSoldId = reader.GetInt32("ProductSoldId"),
-                            TotalUnits = reader.GetInt32("TotalUnits"),
                             TotalSale = reader.GetDecimal("TotalSale"),
                             Currency = reader.GetInt32("Currency"),
                             PaymentMethod = reader.GetString("PaymentMethod"),
@@ -59,20 +56,86 @@ namespace MVCproyect.Repository
             return sales;
         }
 
-        public async Task<Sale> GetSaleByIdAsync(int id)
+        public async Task<List<Sale>> GetSalesWithDetailsAsync()
         {
-            Sale sale = new Sale();
+            List<Sale> salesList = new List<Sale>();
 
             try
             {
                 using MySqlConnection connection = _context.CreateConnection();
-
                 await connection.OpenAsync();
 
-                string query = "SELECT * FROM sales WHERE id=@id";
+                string query = "SELECT * FROM sales";
 
                 using MySqlCommand command = new MySqlCommand(query, connection);
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
 
+                while (await reader.ReadAsync())
+                {
+                    var sale = new Sale
+                    {
+                        Id = reader.GetInt32("Id"),
+                        ClientName = reader.GetString("ClientName"),
+                        TotalSale = reader.GetDecimal("TotalSale"),
+                        Currency = reader.GetInt32("Currency"),
+                        PaymentMethod = reader.GetString("PaymentMethod"),
+                        CreatedAt = reader.GetDateTime("CreatedAt"),
+                        SaleDetails = new List<SaleDetail>()
+                    };
+
+                    salesList.Add(sale);
+                }
+                reader.Close();
+
+                if (salesList.Any())
+                {
+                    var saleIds = string.Join(",", salesList.Select(s => s.Id));
+
+                    string detailsQuery = $"SELECT * FROM sale_details WHERE SaleId IN ({saleIds})";
+
+                    using MySqlCommand detailsCommand = new MySqlCommand(detailsQuery, connection);
+                    using MySqlDataReader detailsReader = (MySqlDataReader)await detailsCommand.ExecuteReaderAsync();
+
+                    while (await detailsReader.ReadAsync())
+                    {
+                        var detail = new SaleDetail()
+                        {
+                            Id = detailsReader.GetInt32("Id"),
+                            SaleId = detailsReader.GetInt32("SaleId"),
+                            ProductId = detailsReader.GetInt32("ProductId"),
+                            ProductName = detailsReader.GetString("ProductName"),
+                            Price = detailsReader.GetDecimal("Price"),
+                            Units = detailsReader.GetInt32("Units"),
+                        };
+
+                        var sale = salesList.FirstOrDefault(s => s.Id == detail.SaleId);
+                        if (sale != null)
+                        {
+                            sale.SaleDetails.Add(detail);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return salesList;
+        }
+
+        public async Task<Sale> GetSaleByIdAsync(int id)
+        {
+            Sale sale = null;
+
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+                await connection.OpenAsync();
+
+                string query = "SELECT * FROM sales WHERE Id = @id";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@id", id);
 
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
@@ -83,15 +146,38 @@ namespace MVCproyect.Repository
                     {
                         Id = reader.GetInt32("Id"),
                         ClientName = reader.GetString("ClientName"),
-                        SaleContent = reader.GetString("SaleContent"),
-                        ProductSoldId = reader.GetInt32("ProductSoldId"),
-                        TotalUnits = reader.GetInt32("TotalUnits"),
                         TotalSale = reader.GetDecimal("TotalSale"),
                         Currency = reader.GetInt32("Currency"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
-                        CreatedAt = reader.GetDateTime("CreatedAt")
+                        CreatedAt = reader.GetDateTime("CreatedAt"),
+                        SaleDetails = new List<SaleDetail>()
                     };
+                }
+                reader.Close();
 
+                if (sale != null)
+                {
+                    string detailsQuery = "SELECT * FROM sale_details WHERE SaleId = @saleId";
+
+                    using MySqlCommand detailsCommand = new MySqlCommand(detailsQuery, connection);
+                    detailsCommand.Parameters.AddWithValue("@saleId", sale.Id);
+
+                    using MySqlDataReader detailsReader = (MySqlDataReader)await detailsCommand.ExecuteReaderAsync();
+
+                    while (await detailsReader.ReadAsync())
+                    {
+                        var detail = new SaleDetail()
+                        {
+                            Id = detailsReader.GetInt32("Id"),
+                            SaleId = detailsReader.GetInt32("SaleId"),
+                            ProductId = detailsReader.GetInt32("ProductId"),
+                            ProductName = detailsReader.GetString("ProductName"),
+                            Price = detailsReader.GetDecimal("Price"),
+                            Units = detailsReader.GetInt32("Units"),
+                        };
+
+                        sale.SaleDetails.Add(detail);
+                    }
                 }
             }
             catch (Exception ex)
@@ -107,25 +193,33 @@ namespace MVCproyect.Repository
             try
             {
                 using MySqlConnection connection = _context.CreateConnection();
-
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO sales (id, clientname, salecontent, productsoldid, totalunits, totalsale, Currency, paymentmethod) VALUES (@Id, @ClientName, @SaleContent, @ProductSoldId, @TotalUnits, @TotalSale, @Currency, @PaymentMethod)";
+                using var transaction = await connection.BeginTransactionAsync();
 
-                using MySqlCommand command = new MySqlCommand(query, connection);
-
+                string saleQuery = "INSERT INTO sales (id, clientname, totalsale, currency, paymentmethod) VALUES (@Id, @ClientName, @TotalSale, @Currency, @PaymentMethod)";
+                using MySqlCommand saleCommand = new MySqlCommand(saleQuery, connection, transaction);
                 newSale.Id = await _idGeneratorService.GenerateNextIdAsync("sales");
+                saleCommand.Parameters.AddWithValue("@Id", newSale.Id);
+                saleCommand.Parameters.AddWithValue("@ClientName", newSale.ClientName);
+                saleCommand.Parameters.AddWithValue("@TotalSale", newSale.TotalSale);
+                saleCommand.Parameters.AddWithValue("@Currency", newSale.Currency);
+                saleCommand.Parameters.AddWithValue("@PaymentMethod", newSale.PaymentMethod);
+                await saleCommand.ExecuteNonQueryAsync();
 
-                command.Parameters.AddWithValue("@Id", newSale.Id);
-                command.Parameters.AddWithValue("@ClientName", newSale.ClientName);
-                command.Parameters.AddWithValue("@SaleContent", newSale.SaleContent);
-                command.Parameters.AddWithValue("@ProductSoldId", newSale.ProductSoldId);
-                command.Parameters.AddWithValue("@TotalUnits", newSale.TotalUnits);
-                command.Parameters.AddWithValue("@TotalSale", newSale.TotalSale);
-                command.Parameters.AddWithValue("@Currency", newSale.Currency);
-                command.Parameters.AddWithValue("@PaymentMethod", newSale.PaymentMethod);
+                string productQuery = "INSERT INTO sale_details (SaleId, ProductId, ProductName, Price, Units) VALUES (@SaleId, @ProductId, @ProductName, @Price, @Units)";
+                foreach (var detail in newSale.SaleDetails)
+                {
+                    using MySqlCommand productCommand = new MySqlCommand(productQuery, connection, transaction);
+                    productCommand.Parameters.AddWithValue("@SaleId", newSale.Id);
+                    productCommand.Parameters.AddWithValue("@ProductId", detail.ProductId);
+                    productCommand.Parameters.AddWithValue("@ProductName", detail.ProductName);
+                    productCommand.Parameters.AddWithValue("@Price", detail.Price);
+                    productCommand.Parameters.AddWithValue("@Units", detail.Units);
+                    await productCommand.ExecuteNonQueryAsync();
+                }
 
-                await command.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -138,23 +232,55 @@ namespace MVCproyect.Repository
             try
             {
                 using MySqlConnection connection = _context.CreateConnection();
-
                 await connection.OpenAsync();
 
-                string query = "UPDATE sales SET clientname = @ClientName, salecontent = @SaleContent, productsoldid = @ProductSoldId, totalunits = @TotalUnits, totalsale = @TotalSale, Currency = @Currency, paymentmethod = @PaymentMethod WHERE id = @Id";
+                using MySqlTransaction transaction = await connection.BeginTransactionAsync();
 
-                using MySqlCommand command = new MySqlCommand(query, connection);
+                try
+                {
+                    // Actualizar la venta principal en `sales`
+                    string updateSaleQuery = @" UPDATE sales SET clientname = @ClientName, totalsale = @TotalSale, Currency = @Currency, paymentmethod = @PaymentMethod WHERE id = @Id";
 
-                command.Parameters.AddWithValue("@Id", updatedSale.Id);
-                command.Parameters.AddWithValue("@ClientName", updatedSale.ClientName);
-                command.Parameters.AddWithValue("@SaleContent", updatedSale.SaleContent);
-                command.Parameters.AddWithValue("@ProductSoldId", updatedSale.ProductSoldId);
-                command.Parameters.AddWithValue("@TotalUnits", updatedSale.TotalUnits);
-                command.Parameters.AddWithValue("@TotalSale", updatedSale.TotalSale);
-                command.Parameters.AddWithValue("@Currency", updatedSale.Currency);
-                command.Parameters.AddWithValue("@PaymentMethod", updatedSale.PaymentMethod);
+                    using MySqlCommand saleCommand = new MySqlCommand(updateSaleQuery, connection, transaction);
+                    saleCommand.Parameters.AddWithValue("@Id", updatedSale.Id);
+                    saleCommand.Parameters.AddWithValue("@ClientName", updatedSale.ClientName);
+                    saleCommand.Parameters.AddWithValue("@TotalSale", updatedSale.TotalSale);
+                    saleCommand.Parameters.AddWithValue("@Currency", updatedSale.Currency);
+                    saleCommand.Parameters.AddWithValue("@PaymentMethod", updatedSale.PaymentMethod);
 
-                await command.ExecuteNonQueryAsync();
+                    await saleCommand.ExecuteNonQueryAsync();
+
+                    // Actualizar o insertar detalles de la venta en `sale_details`
+                    // Primero elimina los detalles anteriores de `sale_details` para esta venta
+                    string deleteDetailsQuery = "DELETE FROM sale_details WHERE SaleId = @SaleId";
+                    using MySqlCommand deleteCommand = new MySqlCommand(deleteDetailsQuery, connection, transaction);
+                    deleteCommand.Parameters.AddWithValue("@SaleId", updatedSale.Id);
+                    await deleteCommand.ExecuteNonQueryAsync();
+
+                    foreach (var detail in updatedSale.SaleDetails)
+                    {
+                        string insertDetailQuery = @"
+                    INSERT INTO sale_details (SaleId, ProductId, ProductName, Price, Units) 
+                    VALUES (@SaleId, @ProductId, @ProductName, @Price, @Units)";
+
+                        using MySqlCommand detailCommand = new MySqlCommand(insertDetailQuery, connection, transaction);
+                        detailCommand.Parameters.AddWithValue("@SaleId", updatedSale.Id);
+                        detailCommand.Parameters.AddWithValue("@ProductId", detail.ProductId);
+                        detailCommand.Parameters.AddWithValue("@ProductName", detail.ProductName);
+                        detailCommand.Parameters.AddWithValue("@Price", detail.Price);
+                        detailCommand.Parameters.AddWithValue("@Units", detail.Units);
+
+                        await detailCommand.ExecuteNonQueryAsync();
+                    }
+
+                    await transaction.CommitAsync();
+                }
+                    catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    Console.WriteLine($"Error: {ex.Message}");
+                    throw;
+                }
             }
             catch (Exception ex)
             {
