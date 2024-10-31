@@ -54,9 +54,6 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Client Name</th>
-                        <th scope="col">Product Id</th>
-                        <th scope="col">Sale Content</th>
-                        <th scope="col">Total Units</th>
                         <th scope="col">Total Sale</th>
                         <th scope="col">Currency</th>
                         <th scope="col">Payment Method</th>
@@ -75,9 +72,6 @@
                         <tr>
                             <td>@sale.Id</td>
                             <td>@sale.ClientName</td>
-                            <td>@sale.ProductSoldId</td>
-                            <td>@sale.SaleContent</td>
-                            <td>@sale.TotalUnits</td>
                             <td>@sale.TotalSale</td>
 
                             <td>
@@ -89,7 +83,7 @@
 
                             <td>@sale.PaymentMethod</td>
                             <td>@sale.CreatedAt</td>
-                            
+
                             @if (userRoleId == 1)
                             {
                                 <td>

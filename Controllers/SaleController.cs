@@ -7,6 +7,7 @@ using MVCproyect.Repository;
 using MVCproyect.Services;
 using MySql.Data.MySqlClient;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace MVCproyect.Controllers
 {
@@ -92,25 +93,44 @@ namespace MVCproyect.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Sale newSale)
+        public async Task<ActionResult> Create(Sale newSale,[FromForm] string CartJson)
         {
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var saleDetails = JsonConvert.DeserializeObject<List<SaleDetail>>(CartJson);
+                    newSale.SaleDetails = saleDetails;
+
                     await _saleRepository.AddSaleAsync(newSale);
 
-                    await _productService.UpdateStockAfterSale(newSale.ProductSoldId, newSale.TotalUnits);
+                    foreach (var item in saleDetails)
+                    {
+                        await _productService.UpdateStockAfterSale(item.ProductId, item.Units);
+                    }
+
+                    var document = _saleService.GenerateInvoiceSale(newSale);
+
+                    MemoryStream stream = new MemoryStream();
+                    document.Save(stream);
+
+                    Response.ContentType = "application/pdf";
+                    Response.Headers.Append("content-length", stream.Length.ToString());
+                    byte[] bytes = stream.ToArray();
+                    stream.Close();
+
+                    return File(bytes, "appliccation/pdf", "Invoice.pdf");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"{ex.Message}");
+                    return View("ErrorMessage", new { message = ex.Message });
                 }
             }
 
             return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Update(int id)
@@ -145,25 +165,32 @@ namespace MVCproyect.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateSale(Sale updatedSale)
+        public async Task<ActionResult> UpdateSale(Sale updatedSale, [FromForm] string CartJson)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var saleDetails = JsonConvert.DeserializeObject<List<SaleDetail>>(CartJson);
+
+                    updatedSale.SaleDetails = saleDetails;
+
                     await _saleRepository.UpdateSaleAsync(updatedSale);
 
-                    ViewData["Sales"] = updatedSale;
+                    foreach (var item in saleDetails)
+                    {
+                        await _productService.UpdateStockAfterSale(item.ProductId, item.Units);
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    ViewBag.ErrorMessage = "An error has occured: " + ex.Message.ToString() + "Sale Id: " + updatedSale.Id;
+                    ViewBag.ErrorMessage = "An error has occurred: " + ex.Message + " Sale Id: " + updatedSale.Id;
                     return View("ErrorView");
                 }
             }
             return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

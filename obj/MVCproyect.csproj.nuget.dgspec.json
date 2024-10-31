@@ -67,9 +67,17 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
             "NuGet.Frameworks": {
               "target": "Package",
               "version": "[6.11.0, )"
+            },
+            "PDFsharp-MigraDoc": {
+              "target": "Package",
+              "version": "[6.1.1, )"
             },
             "SpreadsheetLight": {
               "target": "Package",
