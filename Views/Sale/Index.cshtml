@@ -73,14 +73,7 @@
                             <td>@sale.Id</td>
                             <td>@sale.ClientName</td>
                             <td>@sale.TotalSale</td>
-
-                            <td>
-                                @{
-                                    var saleCurrency = currencies.FirstOrDefault(currency => currency.Id == sale.Currency);
-                                }
-                                @saleCurrency.CurrencyName
-                            </td>
-
+                            <td>@sale.Currency</td>
                             <td>@sale.PaymentMethod</td>
                             <td>@sale.CreatedAt</td>
 

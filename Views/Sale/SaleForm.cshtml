@@ -76,7 +76,7 @@
                                 <option value="" disabled selected>Choose currency...</option>
                                 @foreach (Currency currencie in currencies)
                                 {
-                                    <option value="@currencie.Id">@currencie.CurrencyName</option>
+                                    <option value="@currencie.Acronym">@currencie.CurrencyName</option>
                                 }
                             </select>
                             <span asp-validation-for="Currency" class="text-danger"></span>

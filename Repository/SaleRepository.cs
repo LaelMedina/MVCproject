@@ -40,7 +40,7 @@ namespace MVCproyect.Repository
                             Id = reader.GetInt32("Id"),
                             ClientName = reader.GetString("ClientName"),
                             TotalSale = reader.GetDecimal("TotalSale"),
-                            Currency = reader.GetInt32("Currency"),
+                            Currency = reader.GetString("Currency"),
                             PaymentMethod = reader.GetString("PaymentMethod"),
                             CreatedAt = reader.GetDateTime("CreatedAt")
                         });
@@ -77,7 +77,7 @@ namespace MVCproyect.Repository
                         Id = reader.GetInt32("Id"),
                         ClientName = reader.GetString("ClientName"),
                         TotalSale = reader.GetDecimal("TotalSale"),
-                        Currency = reader.GetInt32("Currency"),
+                        Currency = reader.GetString("Currency"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
                         CreatedAt = reader.GetDateTime("CreatedAt"),
                         SaleDetails = new List<SaleDetail>()
@@ -147,7 +147,7 @@ namespace MVCproyect.Repository
                         Id = reader.GetInt32("Id"),
                         ClientName = reader.GetString("ClientName"),
                         TotalSale = reader.GetDecimal("TotalSale"),
-                        Currency = reader.GetInt32("Currency"),
+                        Currency = reader.GetString("Currency"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
                         CreatedAt = reader.GetDateTime("CreatedAt"),
                         SaleDetails = new List<SaleDetail>()

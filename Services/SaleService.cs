@@ -1,4 +1,5 @@
-﻿using MigraDoc.DocumentObjectModel;
+﻿using MathNet.Numerics;
+using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
@@ -161,16 +162,27 @@ namespace MVCproyect.Services
             }
 
             decimal Iva = 0.15m;
-            decimal total = newSale.TotalSale * Iva;
+            decimal total = Math.Round(newSale.TotalSale * Iva, 2);
 
-            paragraph.Format.SpaceAfter = 10;
+            var tableTotal = section.AddTable();
+            tableTotal.Borders.Width = 0;
+
+            var column1 = tableTotal.AddColumn("5cm");
+            var column2 = tableTotal.AddColumn("3cm"); 
+
+            var rowTotal = tableTotal.AddRow();
+            rowTotal.Cells[0].AddParagraph("Sub Total:");
+            rowTotal.Cells[1].AddParagraph($"{newSale.TotalSale:F2} USD");
+
+            rowTotal = tableTotal.AddRow();
+            rowTotal.Cells[0].AddParagraph("IVA:");
+            rowTotal.Cells[1].AddParagraph($"{(newSale.TotalSale * Iva):F2} USD");
+
+            rowTotal = tableTotal.AddRow();
+            rowTotal.Cells[0].AddParagraph("Total:");
+            rowTotal.Cells[1].AddParagraph($"{(newSale.TotalSale + total):F2} USD");
+
             paragraph = section.AddParagraph();
-            paragraph.AddText("Sub Total: " + newSale.TotalSale); //total
-            paragraph.AddLineBreak();
-            paragraph.AddText("Iva: " + newSale.TotalSale * Iva); //iva
-            paragraph.AddLineBreak();
-            paragraph.AddText("Total: " + (newSale.TotalSale + total)); //total
-            paragraph.AddLineBreak();
             paragraph.Format.SpaceAfter = 10;
 
             paragraph = section.Footers.Primary.AddParagraph();

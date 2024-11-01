@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using MVCproyect.Interfaces;
 using MVCproyect.Models;
 using MVCproyect.Repository;
+using MVCproyect.Services;
 
 public class ReportController : Controller
 {
     private readonly ProductRepository _productRepository;
     private readonly SaleRepository _saleRepository;
+    private readonly SaleService _saleService;
 
-    public ReportController(ProductRepository productRepository, SaleRepository saleRepository)
+    public ReportController(ProductRepository productRepository, SaleRepository saleRepository, SaleService saleService)
     {
         _productRepository = productRepository;
         _saleRepository = saleRepository;
+        _saleService = saleService;
     }
 
     public IActionResult Index()
@@ -58,6 +61,7 @@ public class ReportController : Controller
     public async Task<IActionResult> GenerateSalesReportExcel()
     {
         List<Sale> sales = await _saleRepository.GetSalesWithDetailsAsync();
+        List<Currency> currencies = await _saleService.GetCurrenciesAsync();
         var memoryStream = new MemoryStream();
 
         SLDocument sLDocument = new SLDocument();
@@ -66,13 +70,13 @@ public class ReportController : Controller
         dt.Columns.Add("Sale Id", typeof(int));
         dt.Columns.Add("Client", typeof(string));
         dt.Columns.Add("Total Sale", typeof(decimal));
-        dt.Columns.Add("Currency", typeof(int));
+        dt.Columns.Add("Currency", typeof(string));
         dt.Columns.Add("Payment Method", typeof(string));
         dt.Columns.Add("Sale Date", typeof(string));
         dt.Columns.Add("Product Name", typeof(string));
         dt.Columns.Add("Units", typeof(int));
         dt.Columns.Add("Price", typeof(decimal));
-        dt.Columns.Add("Total Price", typeof(decimal));
+        dt.Columns.Add("Total Price (Dollars)", typeof(decimal));
 
         foreach (Sale sale in sales)
         {

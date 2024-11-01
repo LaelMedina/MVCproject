@@ -74,13 +74,10 @@
                         <div class="col-md-4">
                             <label asp-for="Currency" class="form-label">Currency</label>
                             <select asp-for="Currency" class="form-select" aria-label="Select currency">
-                                @{
-                                    var saleCurrency = currencies.FirstOrDefault(currency => currency.Id == currentSale.Currency);
-                                }
-                                <option value="@currentSale.Currency" selected class="text-muted fst-itali">@saleCurrency.CurrencyName</option>
+                                <option value="@currentSale.Currency" selected class="text-muted fst-itali">@currentSale.Currency</option>
                                 @foreach (var currency in currencies)
                                 {
-                                    <option value="@currency.Id">@currency.CurrencyName</option>
+                                    <option value="@currency.Acronym">@currency.CurrencyName</option>
                                 }
                             </select>
                             <span asp-validation-for="Currency" class="text-danger"></span>
