@@ -113,13 +113,13 @@ namespace MVCproyect.Controllers
 
                     MemoryStream stream = new MemoryStream();
                     document.Save(stream);
-
+                    string fileName = "Invoice_" + newSale.Id + ".pdf";
                     Response.ContentType = "application/pdf";
                     Response.Headers.Append("content-length", stream.Length.ToString());
                     byte[] bytes = stream.ToArray();
                     stream.Close();
 
-                    return File(bytes, "appliccation/pdf", "Invoice.pdf");
+                    return File(bytes, "appliccation/pdf", fileName);
                 }
                 catch (Exception ex)
                 {
