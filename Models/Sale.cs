@@ -12,6 +12,11 @@ namespace MVCproyect.Models
         [StringLength(100, ErrorMessage = "Client name cannot exceed 100 characters.")]
         public string ClientName { get; set; } = string.Empty;
 
+        public int SellerId { get; set; }
+
+        [Required(ErrorMessage = "Seller Name is required.")]
+        public string SellerName { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Total sale amount is required.")]
         public decimal TotalSale { get; set; }
 

@@ -20,10 +20,12 @@ namespace MVCproyect.Controllers
         private readonly SaleService _saleService;
         private readonly SaleRepository _saleRepository;
         private readonly UserRepository _userRepository;
+        private readonly SellerRepository _sellerRepository;
         private List<Sale> _sales;
         private List<Currency> _currencies;
+        private List<Seller> _sellers = new();
 
-        public SaleController(MySqlService context, SaleRepository saleRepository, UserRepository userRepository)
+        public SaleController(MySqlService context, SaleRepository saleRepository, UserRepository userRepository, SellerRepository sellerRepository)
         {
             _context = context;
             _idGeneratorService = new IdGeneratorService(_context);
@@ -33,6 +35,7 @@ namespace MVCproyect.Controllers
             _userRepository = userRepository;
             _sales = new List<Sale>();
             _currencies = new List<Currency>();
+            _sellerRepository = sellerRepository;
         }
 
         public async Task<ActionResult> Index()
@@ -52,7 +55,6 @@ namespace MVCproyect.Controllers
                 ViewData["LoggedUser"] = loggedUser;
 
                 _sales = await _saleRepository.GetSalesAsync();
-
                 _currencies = await _saleService.GetCurrenciesAsync();
             }
             catch (Exception ex)
@@ -80,6 +82,9 @@ namespace MVCproyect.Controllers
 
             _currencies = await _saleService.GetCurrenciesAsync();
 
+            _sellers = await _sellerRepository.GetSellersAsync();
+
+            ViewData["Sellers"] = _sellers;
 
             ViewData["products"] = products;
 

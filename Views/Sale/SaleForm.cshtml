@@ -4,6 +4,7 @@
     var products = ViewData["products"] as List<MVCproyect.Models.Product>;
     var paymentMethods = ViewData["paymentMethods"] as List<MVCproyect.Models.PaymentMethod>;
     var currencies = ViewData["Currencies"] as List<MVCproyect.Models.Currency>;
+    var sellers = ViewData["Sellers"] as List<MVCproyect.Models.Seller>;
 }
 
 <!DOCTYPE html>
@@ -31,6 +32,22 @@
                         <label asp-for="ClientName" class="form-label">Client Name</label>
                         <input type="text" asp-for="ClientName" class="form-control" placeholder="Enter client name" />
                         <span asp-validation-for="ClientName" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-8 mb-3">
+                            <label asp-for="SellerName" class="form-label">Seller</label>
+                            <select asp-for="SellerName" class="form-select" id="sellerSelect" aria-label="Select Seller">
+                                <option value="" disabled selected>Choose Seller...</option>
+                                @foreach (Seller seller in sellers)
+                                {
+                                    <option value="@seller.Name" data-id="@seller.Id">@seller.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="SellerName" class="text-danger"></span>
+                        </div>
+
                     </div>
 
                     <div class="row">
@@ -87,6 +104,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <input type="hidden" id="totalSale" asp-for="TotalSale" class="form-control" readonly />
+                            <input type="hidden" id="SellerId" name="SellerId" asp-for="SellerId" class="form-control" readonly />
                             <input type="hidden" name="CartJson" id="CartJson" />
                         </div>
                     </div>
@@ -141,10 +159,10 @@
 
                     $('#cartItems').append(
                         `<li class="list-group-item d-flex justify-content-between align-items-center" data-productid="${item.productId}">
-                            ${item.productName} - ${item.units} units x $${item.price.toFixed(2)}
-                            <span>$${(item.units * item.price).toFixed(2)}</span>
-                            <button class="btn btn-danger btn-sm remove-item">Remove</button>
-                        </li>`
+                                    ${item.productName} - ${item.units} units x $${item.price.toFixed(2)}
+                                    <span>$${(item.units * item.price).toFixed(2)}</span>
+                                    <button class="btn btn-danger btn-sm remove-item">Remove</button>
+                                </li>`
                     );
 
                     calculateTotal();
@@ -153,6 +171,11 @@
                 } else {
                     alert("Please select a product and enter valid units.");
                 }
+            });
+
+            $('#sellerSelect').on('change', function () {
+                var selectedSellerId = $(this).find('option:selected').data('id');
+                $('#SellerId').val(selectedSellerId);
             });
 
             $(document).on('click', '.remove-item', function () {

@@ -39,6 +39,8 @@ namespace MVCproyect.Repository
                         {
                             Id = reader.GetInt32("Id"),
                             ClientName = reader.GetString("ClientName"),
+                            SellerId = reader.GetInt32("SellerId"),
+                            SellerName = reader.GetString("SellerName"),
                             TotalSale = reader.GetDecimal("TotalSale"),
                             Currency = reader.GetString("Currency"),
                             PaymentMethod = reader.GetString("PaymentMethod"),
@@ -76,6 +78,8 @@ namespace MVCproyect.Repository
                     {
                         Id = reader.GetInt32("Id"),
                         ClientName = reader.GetString("ClientName"),
+                        SellerId = reader.GetInt32("SellerId"),
+                        SellerName = reader.GetString("SellerName"),
                         TotalSale = reader.GetDecimal("TotalSale"),
                         Currency = reader.GetString("Currency"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
@@ -146,6 +150,8 @@ namespace MVCproyect.Repository
                     {
                         Id = reader.GetInt32("Id"),
                         ClientName = reader.GetString("ClientName"),
+                        SellerId = reader.GetInt32("SellerId"),
+                        SellerName = reader.GetString("SellerName"),
                         TotalSale = reader.GetDecimal("TotalSale"),
                         Currency = reader.GetString("Currency"),
                         PaymentMethod = reader.GetString("PaymentMethod"),
@@ -197,11 +203,13 @@ namespace MVCproyect.Repository
 
                 using var transaction = await connection.BeginTransactionAsync();
 
-                string saleQuery = "INSERT INTO sales (id, clientname, totalsale, currency, paymentmethod) VALUES (@Id, @ClientName, @TotalSale, @Currency, @PaymentMethod)";
+                string saleQuery = "INSERT INTO sales (id, clientname, SellerId, SellerName, totalsale, currency, paymentmethod) VALUES (@Id, @ClientName, @SellerId, @SellerName, @TotalSale, @Currency, @PaymentMethod)";
                 using MySqlCommand saleCommand = new MySqlCommand(saleQuery, connection, transaction);
                 newSale.Id = await _idGeneratorService.GenerateNextIdAsync("sales");
                 saleCommand.Parameters.AddWithValue("@Id", newSale.Id);
                 saleCommand.Parameters.AddWithValue("@ClientName", newSale.ClientName);
+                saleCommand.Parameters.AddWithValue("@SellerId", newSale.SellerId);
+                saleCommand.Parameters.AddWithValue("@SellerName", newSale.SellerName);
                 saleCommand.Parameters.AddWithValue("@TotalSale", newSale.TotalSale);
                 saleCommand.Parameters.AddWithValue("@Currency", newSale.Currency);
                 saleCommand.Parameters.AddWithValue("@PaymentMethod", newSale.PaymentMethod);
@@ -239,11 +247,13 @@ namespace MVCproyect.Repository
                 try
                 {
                     // Actualizar la venta principal en `sales`
-                    string updateSaleQuery = @" UPDATE sales SET clientname = @ClientName, totalsale = @TotalSale, Currency = @Currency, paymentmethod = @PaymentMethod WHERE id = @Id";
+                    string updateSaleQuery = @" UPDATE sales SET clientname = @ClientName, SellerId = @SellerId, SellerName = @SellerName, totalsale = @TotalSale, Currency = @Currency, paymentmethod = @PaymentMethod WHERE id = @Id";
 
                     using MySqlCommand saleCommand = new MySqlCommand(updateSaleQuery, connection, transaction);
                     saleCommand.Parameters.AddWithValue("@Id", updatedSale.Id);
                     saleCommand.Parameters.AddWithValue("@ClientName", updatedSale.ClientName);
+                    saleCommand.Parameters.AddWithValue("@SellerId", updatedSale.SellerId);
+                    saleCommand.Parameters.AddWithValue("@SellerName", updatedSale.SellerName);
                     saleCommand.Parameters.AddWithValue("@TotalSale", updatedSale.TotalSale);
                     saleCommand.Parameters.AddWithValue("@Currency", updatedSale.Currency);
                     saleCommand.Parameters.AddWithValue("@PaymentMethod", updatedSale.PaymentMethod);

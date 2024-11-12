@@ -15,6 +15,7 @@ namespace MVCproyect.Repository
             _context = context;
             _userService = userService;
         }
+
         public async Task AddUserAsync(User newUser)
         {
             try
@@ -137,6 +138,7 @@ namespace MVCproyect.Repository
             return usersList;
         }
 
+        //Not implemented yet
         public Task UpdateUserAsync(User newUser)
         {
             throw new NotImplementedException();

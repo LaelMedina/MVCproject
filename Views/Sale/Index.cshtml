@@ -1,9 +1,9 @@
 ﻿@{
-    var sales = ViewData["Sales"] as List<MVCproyect.Models.Sale>;
-    var userRoleId = Context.Session.GetInt32("UserRoleId");
-    var loggedUser = ViewData["LoggedUser"] as MVCproyect.Models.User;
-    var rolesList = ViewData["rolesList"] as List<MVCproyect.Models.Role>;
-    var currencies = ViewData["Currencies"] as List<MVCproyect.Models.Currency>;
+    var sales       = ViewData["Sales"] as List<MVCproyect.Models.Sale>;
+    var userRoleId  = Context.Session.GetInt32("UserRoleId");
+    var loggedUser  = ViewData["LoggedUser"] as MVCproyect.Models.User;
+    var rolesList   = ViewData["rolesList"] as List<MVCproyect.Models.Role>;
+    var currencies  = ViewData["Currencies"] as List<MVCproyect.Models.Currency>;
 }
 
 <!DOCTYPE html>
@@ -54,6 +54,7 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Client Name</th>
+                        <th scope="col">Seller Name</th>
                         <th scope="col">Total Sale</th>
                         <th scope="col">Currency</th>
                         <th scope="col">Payment Method</th>
@@ -72,6 +73,7 @@
                         <tr>
                             <td>@sale.Id</td>
                             <td>@sale.ClientName</td>
+                            <td>@sale.SellerName</td>
                             <td>@sale.TotalSale</td>
                             <td>@sale.Currency</td>
                             <td>@sale.PaymentMethod</td>
