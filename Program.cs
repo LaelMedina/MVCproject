@@ -32,6 +32,7 @@ namespace MVCproyect
             builder.Services.AddSingleton<ProductRepository>();
             builder.Services.AddSingleton<SaleRepository>();
             builder.Services.AddSingleton<UserRepository>();
+            builder.Services.AddSingleton<SellerRepository>();
 
 
             var app = builder.Build();
