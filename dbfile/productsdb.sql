@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 31, 2024 at 06:17 PM
+-- Generation Time: Nov 12, 2024 at 10:06 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -62,9 +62,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`Id`, `Name`, `Description`, `Price`, `currency`, `Stock`, `CreatedAt`) VALUES
-(1, 'iPhone 14', 'Latest Apple iPhone with A15 Bionic chip', '999.99', 1, 75, '2024-09-01 10:00:00'),
-(2, 'Samsung Galaxy S23', 'Newest Samsung Galaxy model with Snapdragon processor', '899.99', 1, 56, '2024-09-01 10:05:00'),
-(3, 'Google Pixel 7', 'Google Pixel with the latest Android version', '799.99', 1, 80, '2024-09-01 10:10:00'),
+(1, 'iPhone 14', 'Latest Apple iPhone with A15 Bionic chip', '999.99', 1, 68, '2024-09-01 10:00:00'),
+(2, 'Samsung Galaxy S23', 'Newest Samsung Galaxy model with Snapdragon processor', '899.99', 1, 47, '2024-09-01 10:05:00'),
+(3, 'Google Pixel 7', 'Google Pixel with the latest Android version', '799.99', 1, 76, '2024-09-01 10:10:00'),
 (4, 'OnePlus 10 Pro', 'High-end OnePlus phone with fast charging', '699.99', 1, 100, '2024-09-01 10:15:00'),
 (5, 'Xiaomi Mi 11', 'Xiaomi phone with excellent camera quality', '499.99', 1, 100, '2024-09-01 10:20:00'),
 (6, 'Sony Xperia 1 IV', 'Sony Xperia phone with 4K display', '1199.99', 1, 100, '2024-09-01 10:25:00'),
@@ -74,8 +74,7 @@ INSERT INTO `products` (`Id`, `Name`, `Description`, `Price`, `currency`, `Stock
 (10, 'Asus ROG Phone 6', 'Gaming smartphone with cooling system', '1099.99', 1, 100, '2024-09-01 10:45:00'),
 (11, 'Oppo Find X5', 'Oppo phone with AMOLED display', '749.99', 1, 98, '2024-09-01 10:50:00'),
 (12, 'Vivo X80', 'Vivo phone with advanced photography features', '829.99', 1, 100, '2024-09-01 10:55:00'),
-(13, 'Realme GT 2', 'Realme smartphone with flagship specs', '599.99', 1, 99, '2024-09-01 11:00:00'),
-(14, 'ZTE Axon 30', 'ZTE phone with under-display camera.', '499.99', 1, 89, '2024-09-01 11:05:00');
+(13, 'Realme GT 2', 'Realme smartphone with flagship specs', '599.99', 1, 100, '2024-09-01 11:00:00');
 
 -- --------------------------------------------------------
 
@@ -105,6 +104,8 @@ INSERT INTO `roles` (`RoleId`, `RoleName`) VALUES
 CREATE TABLE `sales` (
   `Id` int(11) NOT NULL,
   `ClientName` varchar(255) NOT NULL,
+  `SellerId` int(11) NOT NULL,
+  `SellerName` varchar(255) NOT NULL DEFAULT '',
   `TotalSale` decimal(10,2) NOT NULL,
   `Currency` varchar(50) NOT NULL DEFAULT '',
   `PaymentMethod` varchar(100) NOT NULL,
@@ -115,17 +116,23 @@ CREATE TABLE `sales` (
 -- Dumping data for table `sales`
 --
 
-INSERT INTO `sales` (`Id`, `ClientName`, `TotalSale`, `Currency`, `PaymentMethod`, `CreatedAt`) VALUES
-(2, 'Lael Medina', '3999.96', 'USD', 'Debit Card', '2024-10-27 10:41:01'),
-(10, 'Eren Jeager', '999.99', 'EUR', 'Cash', '2024-10-27 23:32:50'),
-(11, 'Mikasa Ackerman', '899.99', 'USD', 'Credit Card', '2024-10-27 23:46:17'),
-(12, 'Armin Arlert', '9299.89', 'NIO', 'Cash', '2024-10-27 23:48:16'),
-(13, 'none2', '1499.98', 'NIO', 'Debit Card', '2024-10-28 02:53:06'),
-(14, 'Lael Medina Mayorga', '2699.97', 'USD', 'Debit Card', '2024-10-31 17:19:03'),
-(15, 'Lael Medina Mayorga', '2699.97', 'USD', 'Debit Card', '2024-10-31 17:28:02'),
-(16, 'Lael Medina Mayorga', '7799.91', 'USD', 'Debit Card', '2024-10-31 17:57:57'),
-(17, 'Lael Medina Mayorga', '1099.98', 'NIO', 'Cash', '2024-10-31 18:14:28'),
-(18, 'admin', '2199.97', 'EUR', 'Credit Card', '2024-10-31 18:16:04');
+INSERT INTO `sales` (`Id`, `ClientName`, `SellerId`, `SellerName`, `TotalSale`, `Currency`, `PaymentMethod`, `CreatedAt`) VALUES
+(2, 'Lael Medina', 0, '', '3999.96', 'USD', 'Debit Card', '2024-10-27 10:41:01'),
+(10, 'Eren Jeager', 0, '', '999.99', 'EUR', 'Cash', '2024-10-27 23:32:50'),
+(11, 'Mikasa Ackerman', 0, '', '899.99', 'USD', 'Credit Card', '2024-10-27 23:46:17'),
+(12, 'Armin Arlert', 0, '', '9299.89', 'NIO', 'Cash', '2024-10-27 23:48:16'),
+(13, 'none2', 0, '', '1499.98', 'NIO', 'Debit Card', '2024-10-28 02:53:06'),
+(14, 'Lael Medina Mayorga', 0, '', '2699.97', 'USD', 'Debit Card', '2024-10-31 17:19:03'),
+(15, 'Lael Medina Mayorga', 0, '', '2699.97', 'USD', 'Debit Card', '2024-10-31 17:28:02'),
+(16, 'Lael Medina Mayorga', 0, '', '7799.91', 'USD', 'Debit Card', '2024-10-31 17:57:57'),
+(17, 'Lael Medina Mayorga', 0, '', '1099.98', 'NIO', 'Cash', '2024-10-31 18:14:28'),
+(18, 'admin', 0, '', '2199.97', 'EUR', 'Credit Card', '2024-10-31 18:16:04'),
+(19, 'Eren Jeager', 0, '', '2699.97', 'USD', 'Debit Card', '2024-10-31 18:26:50'),
+(20, 'Lael Medina Mayorga', 0, '', '5199.94', 'USD', 'Debit Card', '2024-10-31 18:45:03'),
+(21, 'Eren Jeager', 0, '', '2699.97', 'NIO', 'Cash', '2024-11-05 15:08:14'),
+(22, 'Lael Medina', 0, '', '5699.94', 'USD', 'Credit Card', '2024-11-05 15:08:59'),
+(23, 'Lael Medina Mayorga', 0, '', '999.99', 'EUR', 'Cash', '2024-11-07 03:36:35'),
+(24, 'Eren Jeager', 5, 'Mikasa Ackerman', '999.99', 'USD', 'Credit Card', '2024-11-12 21:55:44');
 
 -- --------------------------------------------------------
 
@@ -156,7 +163,6 @@ INSERT INTO `sale_details` (`Id`, `SaleId`, `ProductId`, `ProductName`, `Price`,
 (38, 13, 2, 'Samsung Galaxy S23', '899.99', 1),
 (39, 13, 3, 'Google Pixel 7', '799.99', 1),
 (40, 13, 9, 'Nokia G50', '299.99', 4),
-(41, 13, 14, 'ZTE Axon 30', '499.99', 5),
 (42, 13, 11, 'Oppo Find X5', '749.99', 2),
 (43, 2, 1, 'iPhone 14', '999.99', 4),
 (49, 14, 2, 'Samsung Galaxy S23', '899.99', 1),
@@ -169,10 +175,20 @@ INSERT INTO `sale_details` (`Id`, `SaleId`, `ProductId`, `ProductName`, `Price`,
 (56, 16, 2, 'Samsung Galaxy S23', '899.99', 2),
 (57, 16, 3, 'Google Pixel 7', '799.99', 4),
 (58, 16, 7, 'Huawei P50 Pro', '899.99', 2),
-(59, 17, 14, 'ZTE Axon 30', '499.99', 1),
 (60, 17, 13, 'Realme GT 2', '599.99', 1),
 (61, 18, 2, 'Samsung Galaxy S23', '899.99', 1),
-(62, 18, 8, 'Motorola Edge 30', '649.99', 2);
+(62, 18, 8, 'Motorola Edge 30', '649.99', 2),
+(63, 19, 1, 'iPhone 14', '999.99', 1),
+(64, 19, 2, 'Samsung Galaxy S23', '899.99', 1),
+(65, 19, 3, 'Google Pixel 7', '799.99', 1),
+(66, 20, 1, 'iPhone 14', '999.99', 1),
+(67, 20, 2, 'Samsung Galaxy S23', '899.99', 2),
+(68, 20, 3, 'Google Pixel 7', '799.99', 3),
+(69, 21, 2, 'Samsung Galaxy S23', '899.99', 3),
+(70, 22, 1, 'iPhone 14', '999.99', 3),
+(71, 22, 2, 'Samsung Galaxy S23', '899.99', 3),
+(72, 23, 1, 'iPhone 14', '999.99', 1),
+(73, 24, 1, 'iPhone 14', '999.99', 1);
 
 -- --------------------------------------------------------
 
@@ -198,6 +214,28 @@ INSERT INTO `tb_currency` (`id`, `currency`, `acronym`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tb_seller`
+--
+
+CREATE TABLE `tb_seller` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(250) DEFAULT '',
+  `Identity` varchar(250) DEFAULT '',
+  `CreatedOn` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_seller`
+--
+
+INSERT INTO `tb_seller` (`Id`, `Name`, `Identity`, `CreatedOn`) VALUES
+(1, 'Eren Jeager', '281-140203-1001C', '2024-11-12'),
+(5, 'Mikasa Ackerman', '1', '2024-11-12'),
+(6, 'Armin', 'Arlert', '2024-11-12');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -215,8 +253,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`UserId`, `Username`, `PasswordHash`, `RoleId`) VALUES
 (1, 'admin', '$2a$11$VVSzZcc6qCSHbi751xm/seYt9.9cBLuFYJsjbnqXyWXAm1FrLy1gm', 1),
 (2, 'user', '$2a$11$ThRRjwhJHwYQjMVI1TtIZe.Qn/ZkoSOTqQzxqhkexVlY1m632XYqy', 2),
-(4, 'user2', '123', 2),
-(8, 'admin3', '$2a$11$GtQPNFHzaWFI6Q3FsxePVuIJAdAp3RCanLLyB3vtukgjnilsTeUlW', 1);
+(14, 'admin2', '$2a$11$b/XQrRglOz.voaQNm6sup.JJLs0QTPbm.TAdJexhdx2XLt5o7q4Zq', 1);
 
 --
 -- Indexes for dumped tables
@@ -261,6 +298,12 @@ ALTER TABLE `tb_currency`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tb_seller`
+--
+ALTER TABLE `tb_seller`
+  ADD PRIMARY KEY (`Id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -286,19 +329,25 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `sale_details`
 --
 ALTER TABLE `sale_details`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
+-- AUTO_INCREMENT for table `tb_seller`
+--
+ALTER TABLE `tb_seller`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
