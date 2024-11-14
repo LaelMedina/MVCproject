@@ -5,6 +5,7 @@ using System.Data;
 using MVCproyect.Services;
 using MVCproyect.Interfaces;
 using MVCproyect.Repository;
+using SpreadsheetLight;
 
 namespace MVCproyect.Controllers
 {
@@ -143,6 +144,35 @@ namespace MVCproyect.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GenerateProductsStockReportExcel()
+        {
+            List<Product> products = await _productRepository.GetProductsAsync();
+            var memoryStream = new MemoryStream();
+
+            SLDocument sLDocument = new SLDocument();
+            System.Data.DataTable dt = new System.Data.DataTable();
+
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Price", typeof(decimal));
+            dt.Columns.Add("Stock", typeof(int));
+
+            foreach (Product product in products)
+            {
+                dt.Rows.Add(product.Id, product.Name, product.Price, product.Stock);
+            }
+
+            sLDocument.ImportDataTable(1, 1, dt, true);
+            sLDocument.SaveAs(memoryStream);
+
+            memoryStream.Position = 0;
+
+            string fileName = $"ProductsStockReport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
     }
 }

@@ -8,6 +8,7 @@ using MVCproyect.Services;
 using MySql.Data.MySqlClient;
 using System.ComponentModel;
 using Newtonsoft.Json;
+using SpreadsheetLight;
 
 namespace MVCproyect.Controllers
 {
@@ -212,6 +213,58 @@ namespace MVCproyect.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GenerateSalesReportExcel()
+        {
+            List<Sale> sales = await _saleRepository.GetSalesWithDetailsAsync();
+            List<Currency> currencies = await _saleService.GetCurrenciesAsync();
+            var memoryStream = new MemoryStream();
+
+            SLDocument sLDocument = new SLDocument();
+            System.Data.DataTable dt = new System.Data.DataTable();
+
+            dt.Columns.Add("Sale Id", typeof(int));
+            dt.Columns.Add("Client", typeof(string));
+            dt.Columns.Add("Seller", typeof(string));
+            dt.Columns.Add("Total Sale", typeof(decimal));
+            dt.Columns.Add("Currency", typeof(string));
+            dt.Columns.Add("Payment Method", typeof(string));
+            dt.Columns.Add("Sale Date", typeof(string));
+            dt.Columns.Add("Product Name", typeof(string));
+            dt.Columns.Add("Units", typeof(int));
+            dt.Columns.Add("Price", typeof(decimal));
+            dt.Columns.Add("Total Price (Dollars)", typeof(decimal));
+
+            foreach (Sale sale in sales)
+            {
+                foreach (var detail in sale.SaleDetails)
+                {
+                    dt.Rows.Add(
+                        sale.Id,
+                        sale.ClientName,
+                        sale.SellerName,
+                        sale.TotalSale,
+                        sale.Currency,
+                        sale.PaymentMethod,
+                        sale.CreatedAt,
+                        detail.ProductName,
+                        detail.Units,
+                        detail.Price,
+                        sale.TotalSale
+                    );
+                }
+            }
+
+            sLDocument.ImportDataTable(1, 1, dt, true);
+            sLDocument.SaveAs(memoryStream);
+
+            memoryStream.Position = 0;
+
+            string fileName = $"SalesReport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
     }
 }

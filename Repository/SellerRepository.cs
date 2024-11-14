@@ -60,7 +60,7 @@ namespace MVCproyect.Repository
 
                 await connection.OpenAsync();
 
-                string query = "SELECT Id, Name, Identity FROM tb_seller WHERE Id=@id";
+                string query = "SELECT Id, Name, Identity, CreatedOn FROM tb_seller WHERE Id=@id";
 
                 MySqlCommand command = new MySqlCommand(query, connection);
 
@@ -134,10 +134,29 @@ namespace MVCproyect.Repository
             }
         }
 
-        //Not Implemented Yet
-        public Task UpdateSellerAsync(Seller newSeller)
+        public async Task UpdateSellerAsync(Seller updatedSeller)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
+
+                string query = "UPDATE tb_seller SET Name = @Name, Identity = @Identity WHERE Id = @Id";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("Id", updatedSeller.Id);
+                command.Parameters.AddWithValue("Name", updatedSeller.Name);
+                command.Parameters.AddWithValue("@Identity", updatedSeller.Identity);
+
+                await command.ExecuteNonQueryAsync();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
         }
     }
 }

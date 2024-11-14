@@ -70,9 +70,40 @@ namespace MVCproyect.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Update() 
+        public async Task<IActionResult> Update(int id) 
         {
-            return View();
+            try
+            {
+                Seller seller = await _sellerRepository.GetSellerByIdAsync(id);
+
+                ViewBag.currentSeller = seller;
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
+            }
+
+            return View("EditSellerForm");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateSeller(Seller updatedSeller)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _sellerRepository.UpdateSellerAsync(updatedSeller);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = "An error has occurred: " + ex.Message + " Sale Id: " + updatedSeller.Id;
+                    return View("ErrorView");
+                }
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
