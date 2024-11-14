@@ -104,6 +104,7 @@
                     <div class="mb-4">
                         <label asp-for="Id" class="form-label" hidden></label>
                         <input type="number" value="@currentSale.Id" asp-for="Id" class="form-control" readonly hidden />
+                        <input type="hidden" name="SellerId" id="SellerId" value="@currentSale.SellerId" />
                         <input type="hidden" id="totalSale" asp-for="TotalSale" class="form-control" readonly />
                         <input type="hidden" name="CartJson" id="CartJson" />
                     </div>
@@ -132,39 +133,39 @@
     <script>
         $(document).ready(function () {
 
-
             let cart = [];
 
-        @if (saleDetails != null && saleDetails.Any())
-        {
-            var saleDetailsJson = System.Text.Json.JsonSerializer.Serialize(saleDetails);
-            <text>
-                        cart = @Html.Raw(saleDetailsJson);
-                                cart.forEach(item => {
-                            let price = item.Price || 0;
+            @if (saleDetails != null && saleDetails.Any())
+            {
+                var saleDetailsJson = System.Text.Json.JsonSerializer.Serialize(saleDetails);
+                <text>
+                    cart = @Html.Raw(saleDetailsJson);
+                    cart.forEach(item => {
+                        let price = item.Price || 0;
                         let units = item.Units || 0;
                         let productName = item.ProductName || 'Unknown Product';
-
+                        
                         $('#cartItems').append(
-                        `<li class="list-group-item d-flex justify-content-between align-items-center" data-productid="${item.ProductId}">
-                            ${productName} - ${units} units x $${price.toFixed(2)}
-                            <span>$${(units * price).toFixed(2)}</span>
-                            <button class="btn btn-danger btn-sm remove-item">Remove</button>
-                        </li>`
+                            `<li class="list-group-item d-flex justify-content-between align-items-center" data-productid="${item.ProductId}">
+                                ${productName} - ${units} units x $${price.toFixed(2)}
+                                <span>$${(units * price).toFixed(2)}</span>
+                                <button class="btn btn-danger btn-sm remove-item">Remove</button>
+                            </li>`
                         );
-                                });
-            </text>
-        }
-
-                function updateCartJson() {
-                    $('#CartJson').val(JSON.stringify(cart));
-                }
+                    });
+                    calculateTotal();
+                </text>
+            }
+            
+            function updateCartJson() {
+                $('#CartJson').val(JSON.stringify(cart));
+            }
 
             function calculateTotal() {
                 let total = 0;
                 cart.forEach(item => {
-                    let price = item.price || 0;
-                    let units = item.units || 0;
+                    let price = item.Price || 0;
+                    let units = item.Units || 0;
                     total += price * units;
                 });
                 $('#totalSale').val(total.toFixed(2));
@@ -199,10 +200,15 @@
 
             $(document).on('click', '.remove-item', function () {
                 const productId = $(this).closest('li').data('productid');
-                cart = cart.filter(item => item.productId !== productId);
+                cart = cart.filter(item => item.ProductId !== productId);
                 $(this).closest('li').remove();
-                calculateTotal();
                 updateCartJson();
+                calculateTotal();
+            });
+            
+            $('#sellerSelect').on('change', function () {
+                var selectedSellerId = $(this).find('option:selected').data('id');
+                $('#SellerId').val(selectedSellerId);
             });
 
             $('form').on('submit', function (event) {
@@ -210,6 +216,7 @@
                     event.preventDefault();
                     alert("Please add at least one item to the cart before submitting.");
                 } else {
+                    calculateTotal();
                     updateCartJson();
                 }
             });
