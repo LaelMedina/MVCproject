@@ -159,7 +159,7 @@ namespace MVCproyect.Controllers
 
                 ViewData["Currencies"] = _currencies;
 
-
+                ViewData["Sellers"] = await _sellerRepository.GetSellersAsync();
             }
             catch (Exception ex)
             {

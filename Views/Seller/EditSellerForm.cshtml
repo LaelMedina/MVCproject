@@ -1,4 +1,4 @@
-﻿@model MVCproyect.Models.Seller;
+﻿@model MVCproyect.Models.Seller
 
 @{
     Seller currentSeller = ViewBag.currentSeller;
@@ -15,36 +15,52 @@
 
     <div class="container mt-5">
 
+        <!-- Encabezado del formulario -->
         <header class="text-center mb-4">
-            <h1 class="display-4">Edit Seller</h1>
+            <h1 class="display-4 text-primary">Edit Seller</h1>
+            <p class="text-muted">Modify the details of the seller below.</p>
         </header>
 
-        <form asp-action="UpdateSeller" method="post" class="p-4 border rounded bg-light shadow-sm">
+        <!-- Formulario con ancho ajustado -->
+        <form asp-action="UpdateSeller" method="post" class="p-4 rounded shadow-lg bg-white border" style="max-width: 500px; margin: 0 auto;">
 
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label">Full Name</label>
-                <input type="text" asp-for="Name" class="form-control" value="@currentSeller.Name"/>
+            <div class="mb-4">
+                <label asp-for="Name" class="form-label font-weight-bold">Full Name</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-primary text-white">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <input type="text" asp-for="Name" class="form-control" value="@currentSeller.Name" />
+                </div>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Identity" class="form-label">Identity</label>
-                <input type="text" asp-for="Identity" class="form-control" value="@currentSeller.Identity"/>
+            <div class="mb-4">
+                <label asp-for="Identity" class="form-label font-weight-bold">Identity</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-primary text-white">
+                        <i class="fas fa-id-card"></i>
+                    </span>
+                    <input type="text" asp-for="Identity" class="form-control" value="@currentSeller.Identity" />
+                </div>
                 <span asp-validation-for="Identity" class="text-danger"></span>
             </div>
 
-            <div class="mb-3">
+            <!-- Campo oculto para el ID -->
+            <div class="mb-4">
                 <input type="number" value="@currentSeller.Id" asp-for="Id" class="form-control" readonly hidden />
             </div>
 
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary btn-lg">Update</button>
+            <!-- Botón de actualizar vendedor -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-edit"></i> Update Seller
+                </button>
+                <a href="@Url.Action("Index")" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
             </div>
         </form>
-
-        <div class="mt-3">
-            <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
-        </div>
 
     </div>
 

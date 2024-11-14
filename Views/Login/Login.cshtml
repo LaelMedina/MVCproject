@@ -6,44 +6,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 </head>
-<body>
+<body class="bg-light">
 
     <div class="container mt-5">
-        <div class="text-center">
-            <h1 class="display-4 mb-4">Log In</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-sm">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-4 font-weight-bold">Welcome Back!</h2>
+                        <p class="text-center text-muted">Please log in to continue</p>
 
-            <div class="row justify-content-center mt-4">
-                <div class="col-md-4 col-sm-6">
-                    <form method="post" asp-action="Login" class="p-4 border rounded bg-light shadow-sm">
+                        <form method="post" asp-action="Login">
+                            <div class="form-group mb-4">
+                                <label asp-for="UserName" class="form-label font-weight-bold">Username</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-white"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input type="text" asp-for="UserName" class="form-control" required placeholder="Enter your username" />
+                                </div>
+                            </div>
 
-                        <div class="mb-3">
-                            <label asp-for="UserName" class="form-label">Username:</label>
-                            <input type="text" asp-for="UserName" class="form-control" required />
+                            <div class="form-group mb-4">
+                                <label asp-for="PasswordHash" class="form-label font-weight-bold">Password</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-white"><i class="fas fa-lock"></i></span>
+                                    </div>
+                                    <input type="password" asp-for="PasswordHash" class="form-control" required placeholder="Enter your password" />
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                <div class="alert alert-danger mt-3" role="alert">
+                                    @ViewBag.ErrorMessage
+                                </div>
+                            }
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <small class="text-muted">Need help? Visit our <a href="https://learn.microsoft.com/aspnet/core" target="_blank">documentation</a></small>
                         </div>
-
-                        <div class="mb-3">
-                            <label asp-for="PasswordHash" class="form-label">Password:</label>
-                            <input type="password" asp-for="PasswordHash" class="form-control" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
-                        </div>
-                    </form>
-
-
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <p style="color:red;">@ViewBag.ErrorMessage</p>
-                    }
+                    </div>
                 </div>
-            </div>
-
-            <div class="mt-5">
-                <p>For more information, check out our <a href="https://learn.microsoft.com/aspnet/core" target="_blank">documentation</a>.</p>
             </div>
         </div>
     </div>
+
 </body>
 </html>

@@ -18,31 +18,34 @@
 
     <div class="container mt-5">
 
+        <!-- Encabezado -->
         <header class="text-center mb-4">
-            <h1 class="display-5">Insert New Sale</h1>
+            <h1 class="display-5 text-primary">Insert New Sale</h1>
+            <p class="text-muted">Please fill out the details below to record the sale.</p>
         </header>
 
         <div class="row justify-content-center mt-4">
 
             <div class="col-md-8">
 
-                <form asp-controller="Sale" asp-action="Create" method="post" class="border p-4 shadow-sm bg-light rounded">
+                <!-- Formulario -->
+                <form asp-controller="Sale" asp-action="Create" method="post" class="border p-4 shadow-sm bg-white rounded" style="max-width: 800px; margin: 0 auto;">
 
-                    <div class="mb-3">
-                        <label asp-for="ClientName" class="form-label">Client Name</label>
+                    <div class="mb-4">
+                        <label asp-for="ClientName" class="form-label font-weight-bold">Client Name</label>
                         <input type="text" asp-for="ClientName" class="form-control" placeholder="Enter client name" />
                         <span asp-validation-for="ClientName" class="text-danger"></span>
                     </div>
 
                     <div class="row">
 
-                        <div class="col-md-8 mb-3">
-                            <label asp-for="SellerName" class="form-label">Seller</label>
+                        <div class="col-md-8 mb-4">
+                            <label asp-for="SellerName" class="form-label font-weight-bold">Seller</label>
                             <select asp-for="SellerName" class="form-select" id="sellerSelect" aria-label="Select Seller">
                                 <option value="" disabled selected>Choose Seller...</option>
                                 @foreach (Seller seller in sellers)
                                 {
-                                    <option value="@seller.Name" data-id="@seller.Id">@seller.Name</option>
+                                        <option value="@seller.Name" data-id="@seller.Id">@seller.Name</option>
                                 }
                             </select>
                             <span asp-validation-for="SellerName" class="text-danger"></span>
@@ -51,49 +54,48 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-8 mb-3">
-                            <label class="form-label">Sale Content</label>
+                        <div class="col-md-8 mb-4">
+                            <label class="form-label font-weight-bold">Sale Content</label>
                             <select asp-for="SaleDetails" id="saleContent" class="form-select" aria-label="Select product">
                                 <option value="" disabled selected>Choose product...</option>
                                 @foreach (Product product in products)
                                 {
-                                    <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>
+                                        <option value="@product.Name" data-id="@product.Id" data-price="@product.Price">@product.Name</option>
                                 }
                             </select>
                         </div>
 
-                        <div class="col-md-2 mb-3">
-                            <label asp-for="SaleDetails" class="form-label">Total Units</label>
+                        <div class="col-md-2 mb-4">
+                            <label asp-for="SaleDetails" class="form-label font-weight-bold">Total Units</label>
                             <input id="totalUnits" type="number" asp-for="SaleDetails" class="form-control" placeholder="Enter units" min="1" />
                         </div>
 
-                        <div class="col-md-2 mb-3">
-                            <label class="form-label">Action</label>
+                        <div class="col-md-2 mb-4">
+                            <label class="form-label font-weight-bold">Action</label>
                             <button type="button" id="addToCart" class="btn btn-secondary w-100">Add to Cart</button>
                         </div>
                     </div>
 
                     <div class="row">
-
-                        <div class="col-md-8 mb-3">
-                            <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
+                        <div class="col-md-8 mb-4">
+                            <label asp-for="PaymentMethod" class="form-label font-weight-bold">Payment Method</label>
                             <select asp-for="PaymentMethod" class="form-select" aria-label="Select payment method">
                                 <option value="" disabled selected>Choose payment method...</option>
                                 @foreach (PaymentMethod paymentMethod in paymentMethods)
                                 {
-                                    <option value="@paymentMethod.Name">@paymentMethod.Name</option>
+                                        <option value="@paymentMethod.Name">@paymentMethod.Name</option>
                                 }
                             </select>
                             <span asp-validation-for="PaymentMethod" class="text-danger"></span>
                         </div>
 
-                        <div class="col-md-4 mb-3">
-                            <label asp-for="Currency" class="form-label">Currency</label>
+                        <div class="col-md-4 mb-4">
+                            <label asp-for="Currency" class="form-label font-weight-bold">Currency</label>
                             <select asp-for="Currency" class="form-select" aria-label="Select currency">
                                 <option value="" disabled selected>Choose currency...</option>
                                 @foreach (Currency currencie in currencies)
                                 {
-                                    <option value="@currencie.Acronym">@currencie.CurrencyName</option>
+                                        <option value="@currencie.Acronym">@currencie.CurrencyName</option>
                                 }
                             </select>
                             <span asp-validation-for="Currency" class="text-danger"></span>
@@ -109,19 +111,21 @@
                         </div>
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Save Sale</button>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save"></i> Save Sale
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
                     </div>
                 </form>
 
-                <div class="text-center mt-3">
-                    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to Sales List</a>
-                </div>
-
             </div>
 
-            <div id="cartDiv" class="col-md-4 border p-4 shadow-sm bg-light rounded">
-                <h3>Cart</h3>
+            <!-- Carrito -->
+            <div id="cartDiv" class="col-md-4 border p-4 shadow-sm bg-white rounded">
+                <h3 class="text-primary">Cart</h3>
                 <ul id="cartItems" class="list-group mb-3"></ul>
                 <h4>Total: <span id="cartTotal">0.00</span></h4>
             </div>
