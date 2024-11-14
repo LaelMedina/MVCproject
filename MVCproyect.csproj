@@ -11,6 +11,7 @@
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="MySql.Data" Version="9.0.0" />
+    <PackageReference Include="MySqlBackup.NET" Version="2.3.8" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NuGet.Frameworks" Version="6.11.0" />
     <PackageReference Include="PDFsharp-MigraDoc" Version="6.1.1" />

@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVCproyect.styles.css" asp-append-version="true" />
 
-    <!--Logout icon style ref-->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <!--Scripts to validate forms-->
+    <!-- jQuery and form validation scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
@@ -39,10 +39,27 @@
                                 Session
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownSessionButton1">
-                                <li><a class="dropdown-item" asp-area"" asp-controller="User" asp-action="Index">Users List</a></li>
-                                <li><a class="dropdown-item" href="#">Change Password</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">
+                                        <i class="fas fa-users me-2"></i>Users List
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="DataBaseBackUp" onclick="return confirm('Are you sure you want to backup the database?')">
+                                        <i class="fas fa-database me-2"></i>Database Backup
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="DataBaseRestore" onclick="return confirm('Are you sure you want to restore the database?')">
+                                        <i class="fas fa-upload me-2"></i>Restore Backup
+                                    </a>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout" onclick="return confirm('Are you sure you want to logout from this account?')">Log out</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="Logout" onclick="return confirm('Are you sure you want to logout from this account?')">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Log out
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>

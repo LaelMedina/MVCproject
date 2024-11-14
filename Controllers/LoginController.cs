@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using MVCproyect.Models;
+using MySql.Data.MySqlClient;
+using MVCproyect.Services;
 
 public class LoginController : Controller
 {
     private readonly UserService _userService;
+    private readonly MySqlService _mySqlService;
 
-    public LoginController(UserService userService)
+    public LoginController(UserService userService, MySqlService mySqlService)
     {
         _userService = userService;
+        _mySqlService = mySqlService;
     }
 
     public IActionResult Login()
@@ -35,5 +39,24 @@ public class LoginController : Controller
     {
         HttpContext.Session.Clear();
         return RedirectToAction("Login");
+    }
+
+    public IActionResult DataBaseBackUp() 
+    {
+        _mySqlService.DataBaseBackUp();
+        return RedirectToAction("Index", "Home");
+    }
+
+    public IActionResult DataBaseRestore()
+    {
+        try
+        {
+            _mySqlService.RestoreDataBase();
+        }
+        catch (Exception ex) 
+        {
+            return RedirectToAction("Error","Home");
+        }
+        return RedirectToAction("Index", "Home");
     }
 }

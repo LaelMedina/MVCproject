@@ -206,3 +206,4 @@ C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\bin\Debug\net8.0\de\Migra
 C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\bin\Debug\net8.0\de\MigraDoc.RtfRendering.resources.dll
 C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\bin\Debug\net8.0\de\PdfSharp.Charting.resources.dll
 C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\bin\Debug\net8.0\de\PdfSharp.resources.dll
+C:\Users\Usuario\OneDrive\Documentos\Coding\MVCproject\bin\Debug\net8.0\MySqlBackup.dll
