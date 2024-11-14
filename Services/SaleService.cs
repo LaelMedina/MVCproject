@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Fields;
+using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using MVCproyect.Interfaces;
@@ -96,12 +97,12 @@ namespace MVCproyect.Services
         public PdfDocument GenerateInvoiceSale(Sale newSale)
         {
             var document = new Document();
+            document.Info.Title = "Invoice - Best Store";
 
             BuildDocument(document, newSale);
 
             var pdfRenderer = new PdfDocumentRenderer();
             pdfRenderer.Document = document;
-
             pdfRenderer.RenderDocument();
 
             return pdfRenderer.PdfDocument;
@@ -111,83 +112,108 @@ namespace MVCproyect.Services
         {
             Section section = document.AddSection();
 
-            //Header
+            // Encabezado
+            Image logo = section.AddImage("Images/beststore_logo.jpg");
+            logo.Width = "2cm";
+            logo.LockAspectRatio = true;
+            logo.Left = ShapePosition.Left;
+            logo.Top = ShapePosition.Top;
+
             var paragraph = section.AddParagraph();
-            paragraph.AddText("BEST STORE");
-            paragraph.AddLineBreak();
-            paragraph.AddText("website: www.beststore.com");
+            paragraph.AddFormattedText("BEST STORE", TextFormat.Bold);
+            paragraph.Format.Font.Size = 18;
+            paragraph.Format.Font.Color = Colors.DarkBlue;
+            paragraph.Format.SpaceAfter = 3;
+
+            paragraph = section.AddParagraph();
+            paragraph.AddText("Website: www.beststore.com");
             paragraph.AddLineBreak();
             paragraph.AddText("Email: beststore@gmail.com");
             paragraph.AddLineBreak();
             paragraph.AddText("Phone: 8660-1995");
             paragraph.Format.SpaceAfter = 20;
 
-            //Customer Details
+            // Detalles del cliente
             paragraph = section.AddParagraph();
-            paragraph.AddText("Invoice No. " + newSale.Id); //Id
+            paragraph.AddFormattedText("Invoice No. " + newSale.Id, TextFormat.Bold);
+            paragraph.Format.Font.Size = 10;
             paragraph.AddLineBreak();
-            paragraph.AddText("Bailed To. " + newSale.ClientName); //Client Name
+            paragraph.AddFormattedText("Billed To: " + newSale.ClientName, TextFormat.Italic);
             paragraph.AddLineBreak();
-            paragraph.AddText("Payment Method. " + newSale.PaymentMethod); //Payment Method
+            paragraph.AddFormattedText("Billed By: " + newSale.SellerName, TextFormat.Italic);
             paragraph.AddLineBreak();
+            paragraph.AddText("Payment Method: " + newSale.PaymentMethod);
+            paragraph.AddLineBreak();
+            paragraph.AddText("Date: ");
             paragraph.Add(new DateField { Format = "yyyy/MM/dd HH:mm:ss" });
-            paragraph.Format.SpaceAfter = 10;
+            paragraph.Format.SpaceAfter = 15;
 
-            var table = document.LastSection.AddTable();
+            // Tabla de productos
+            var table = section.AddTable();
             table.Borders.Width = 0.5;
+            table.Borders.Color = Colors.Gray;
+            table.LeftPadding = 5;
+            table.RightPadding = 5;
+            table.Rows.LeftIndent = 5;
 
-            //Table columns
-            table.AddColumn("1cm");
-            table.AddColumn("9cm");
-            table.AddColumn("3cm");
-            table.AddColumn("3cm");
+            table.AddColumn("1.5cm");
+            table.AddColumn("6cm");
+            table.AddColumn("3cm").Format.Alignment = ParagraphAlignment.Right;
+            table.AddColumn("2.5cm").Format.Alignment = ParagraphAlignment.Right;
 
-            //Table headers
+            // Encabezados de tabla
             Row row = table.AddRow();
+            row.Shading.Color = Colors.LightGray;
             row.HeadingFormat = true;
             row.Format.Font.Bold = true;
-            row.Cells[0].AddParagraph("Id");
+            row.Cells[0].AddParagraph("ID");
             row.Cells[1].AddParagraph("Product");
-            row.Cells[2].AddParagraph("Price");
+            row.Cells[2].AddParagraph("Price (USD)");
             row.Cells[3].AddParagraph("Units");
 
-            // Adding product rows
-            for (int i = 0; i < newSale.SaleDetails.Count; i++)
+            // Agregar productos al carrito
+            foreach (var item in newSale.SaleDetails)
             {
                 row = table.AddRow();
-                row.Cells[0].AddParagraph(newSale.SaleDetails[i].ProductId.ToString());
-                row.Cells[1].AddParagraph(newSale.SaleDetails[i].ProductName);
-                row.Cells[2].AddParagraph(newSale.SaleDetails[i].Price.ToString());
-                row.Cells[3].AddParagraph(newSale.SaleDetails[i].Units.ToString());
+                row.Cells[0].AddParagraph(item.ProductId.ToString());
+                row.Cells[1].AddParagraph(item.ProductName);
+                row.Cells[2].AddParagraph($"{item.Price:F2}");
+                row.Cells[3].AddParagraph(item.Units.ToString());
             }
 
-            decimal Iva = 0.15m;
-            decimal total = Math.Round(newSale.TotalSale * Iva, 2);
+            // Sección de Totales
+            var totalTable = section.AddTable();
+            totalTable.Borders.Width = 0;
+            totalTable.AddColumn("6cm");
+            totalTable.AddColumn("3cm").Format.Alignment = ParagraphAlignment.Right;
 
-            var tableTotal = section.AddTable();
-            tableTotal.Borders.Width = 0;
+            decimal ivaRate = 0.15m;
+            decimal subTotal = newSale.TotalSale;
+            decimal ivaAmount = Math.Round(subTotal * ivaRate, 2);
+            decimal grandTotal = subTotal + ivaAmount;
 
-            var column1 = tableTotal.AddColumn("5cm");
-            var column2 = tableTotal.AddColumn("3cm"); 
+            Row totalRow = totalTable.AddRow();
+            totalRow.Cells[0].AddParagraph("Sub Total:");
+            totalRow.Cells[1].AddParagraph($"{subTotal:F2} USD");
 
-            var rowTotal = tableTotal.AddRow();
-            rowTotal.Cells[0].AddParagraph("Sub Total:");
-            rowTotal.Cells[1].AddParagraph($"{newSale.TotalSale:F2} USD");
+            totalRow = totalTable.AddRow();
+            totalRow.Cells[0].AddParagraph("IVA:");
+            totalRow.Cells[1].AddParagraph($"{ivaAmount:F2} USD");
 
-            rowTotal = tableTotal.AddRow();
-            rowTotal.Cells[0].AddParagraph("IVA:");
-            rowTotal.Cells[1].AddParagraph($"{(newSale.TotalSale * Iva):F2} USD");
-
-            rowTotal = tableTotal.AddRow();
-            rowTotal.Cells[0].AddParagraph("Total:");
-            rowTotal.Cells[1].AddParagraph($"{(newSale.TotalSale + total):F2} USD");
+            totalRow = totalTable.AddRow();
+            totalRow.Cells[0].AddParagraph("Total:");
+            totalRow.Cells[1].AddParagraph($"{grandTotal:F2} USD");
 
             paragraph = section.AddParagraph();
             paragraph.Format.SpaceAfter = 10;
 
+            // Pie de página
             paragraph = section.Footers.Primary.AddParagraph();
-            paragraph.AddText("Best Store Inc. Leon, Nicaragua.");
+            paragraph.AddText("Thank you for your business with Best Store Inc.");
+            paragraph.AddLineBreak();
+            paragraph.AddText("Leon, Nicaragua.");
             paragraph.Format.Alignment = ParagraphAlignment.Center;
         }
+
     }
 }

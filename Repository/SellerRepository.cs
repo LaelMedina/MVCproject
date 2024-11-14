@@ -174,6 +174,7 @@ namespace MVCproyect.Repository
                     "s.SellerName AS Seller_Name, \r\n    " +
                     "(SELECT COUNT(*) FROM sales WHERE SellerId = s.SellerId) AS Total_Sales,\r\n    " +
                     "COUNT(sd.Units) AS Total_Units,\r\n    " +
+                    "(SELECT SUM(sales.TotalSale) FROM sales WHERE SellerId = s.SellerId) AS Total_Income,\r\n" +
                     "SUM(s.TotalSale) AS Total_Income \r\n" +
                     "FROM sale_details sd\r\n" +
                     "JOIN sales s ON s.Id = sd.SaleId\r\n" +
