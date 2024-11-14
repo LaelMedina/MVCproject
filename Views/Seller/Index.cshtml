@@ -29,20 +29,25 @@
                         </a>
                     </div>
                     <div class="col-md-6 text-end">
-                        <a asp-action="Create" value class="btn btn-outline-primary" id="btnNuevo">Insert Seller</a>
+                        <a asp-action="Create" class="btn btn-outline-primary" id="btnNuevo">
+                            <i class="fas fa-plus"></i> Insert Seller
+                        </a>
 
                         <form asp-action="Update" method="post" style="display:inline">
                             <input type="hidden" name="id" id="editSellerId" value="" />
-                            <button type="submit" class="btn btn-outline-success">Edit</button>
+                            <button type="submit" class="btn btn-outline-success">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
                         </form>
 
                         <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this seller?');">
                             <input type="hidden" name="id" id="deleteSellerId" value="" />
-                            <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
                         </form>
                     </div>
                 </div>
-
             </div>
         }
         else
@@ -57,6 +62,7 @@
                 </div>
             </div>
         }
+
 
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
