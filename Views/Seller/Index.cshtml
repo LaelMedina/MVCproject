@@ -22,20 +22,39 @@
         @if (userRoleId == 1)
         {
             <div class="mb-4">
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a asp-action="Create" value class="btn btn-outline-primary" id="btnNuevo">Insert Seller</a>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a asp-action="GenerateSellersExcelReport" class="btn btn-outline-success">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </a>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a asp-action="Create" value class="btn btn-outline-primary" id="btnNuevo">Insert Seller</a>
 
-                    <form asp-action="Update" method="post" style="display:inline">
-                        <input type="hidden" name="id" id="editSellerId" value="" />
-                        <button type="submit" class="btn btn-outline-success">Edit</button>
-                    </form>
+                        <form asp-action="Update" method="post" style="display:inline">
+                            <input type="hidden" name="id" id="editSellerId" value="" />
+                            <button type="submit" class="btn btn-outline-success">Edit</button>
+                        </form>
 
-                    <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this seller?');">
-                        <input type="hidden" name="id" id="deleteSellerId" value="" />
-                        <button type="submit" class="btn btn-outline-danger">Delete</button>
-                    </form>
+                        <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this seller?');">
+                            <input type="hidden" name="id" id="deleteSellerId" value="" />
+                            <button type="submit" class="btn btn-outline-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
 
+            </div>
+        }
+        else
+        {
+            <div class="mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a asp-action="GenerateSellersExcelReport" class="btn btn-outline-success">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </a>
+                    </div>
+                </div>
             </div>
         }
 

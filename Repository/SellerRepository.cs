@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 
 namespace MVCproyect.Repository
 {
-    public class SellerRepository
+    public class SellerRepository : ISellerRepository
     {
         private MySqlService _context;
         public SellerRepository(MySqlService context) 
@@ -157,6 +157,50 @@ namespace MVCproyect.Repository
             {
                 Console.WriteLine($"{ex.Message}");
             }
+        }
+
+        public async Task<List<SellerReport>> GetSellersReport() 
+        {
+            List<SellerReport> report = new();
+
+            try 
+            { 
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
+
+                string query = "SELECT \r\n    " +
+                    "s.SellerId AS Seller_Id, \r\n    " +
+                    "s.SellerName AS Seller_Name, \r\n    " +
+                    "(SELECT COUNT(*) FROM sales WHERE SellerId = s.SellerId) AS Total_Sales,\r\n    " +
+                    "COUNT(sd.Units) AS Total_Units,\r\n    " +
+                    "SUM(s.TotalSale) AS Total_Income \r\n" +
+                    "FROM sale_details sd\r\n" +
+                    "JOIN sales s ON s.Id = sd.SaleId\r\n" +
+                    "GROUP BY s.SellerId;";
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    report.Add(new SellerReport
+                    {
+                        SellerId = reader.GetInt32("Seller_Id"),
+                        SellerName = reader.GetString("Seller_Name"),
+                        TotalSales = reader.GetInt32("Total_Sales"),
+                        TotalUnits = reader.GetInt32("Total_Units"),
+                        TotalIncome = reader.GetDecimal("Total_Income")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                  Console.WriteLine(ex.Message); 
+            }
+
+            return report;
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MVCproyect.Interfaces;
 using MVCproyect.Models;
 using MVCproyect.Repository;
+using SpreadsheetLight;
 
 namespace MVCproyect.Controllers
 {
@@ -120,6 +121,35 @@ namespace MVCproyect.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> GenerateSellersExcelReport()
+        {
+            List<SellerReport> reports = await _sellerRepository.GetSellersReport();
+            var memoryStream = new MemoryStream();
+
+            SLDocument sLDocument = new SLDocument();
+            System.Data.DataTable dt = new System.Data.DataTable();
+
+            dt.Columns.Add("Seller Id", typeof(int));
+            dt.Columns.Add("Seller Name", typeof(string));
+            dt.Columns.Add("Total Sales", typeof(int));
+            dt.Columns.Add("Total Units", typeof(int));
+            dt.Columns.Add("Total Income", typeof(decimal));
+
+            foreach (SellerReport report in reports)
+            {
+                dt.Rows.Add(report.SellerId, report.SellerName, report.TotalSales, report.TotalUnits, report.TotalIncome);
+            }
+
+            sLDocument.ImportDataTable(1, 1, dt, true);
+            sLDocument.SaveAs(memoryStream);
+
+            memoryStream.Position = 0;
+
+            string fileName = $"SellersSalesReport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
     }
 }
