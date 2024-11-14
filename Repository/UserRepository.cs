@@ -138,10 +138,32 @@ namespace MVCproyect.Repository
             return usersList;
         }
 
-        //Not implemented yet
-        public Task UpdateUserAsync(User newUser)
+        public async Task UpdateUserAsync(User updatedUser)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using MySqlConnection connection = _context.CreateConnection();
+
+                await connection.OpenAsync();
+
+                string query = "UPDATE users SET Username = @name, PasswordHash = @password, RoleId = @role WHERE UserId = @UserId";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                string hashedPassword = _userService.GeneratePasswordHash(updatedUser.PasswordHash);
+
+                command.Parameters.AddWithValue("UserId", updatedUser.UserId);
+                command.Parameters.AddWithValue("@name", updatedUser.UserName);
+                command.Parameters.AddWithValue("@password", hashedPassword);
+                command.Parameters.AddWithValue("@role", updatedUser.RoleId);
+
+                await command.ExecuteNonQueryAsync();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
         }
     }
 }

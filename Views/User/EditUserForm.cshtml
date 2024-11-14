@@ -1,6 +1,7 @@
 ﻿@model MVCproyect.Models.User;
 
 @{
+    User currentUser = ViewBag.currentUser;
     var UserRoles = ViewData["UserRoles"] as List<MVCproyect.Models.Role>;
 }
 
@@ -9,21 +10,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add User</title>
+    <title>Edit User</title>
 </head>
 <body>
 
     <div class="container mt-5">
 
         <header class="text-center mb-4">
-            <h1 class="display-4">Add User</h1>
+            <h1 class="display-4">Edit User</h1>
         </header>
 
-        <form asp-action="Create" method="post" class="p-4 border rounded bg-light shadow-sm">
+        <form asp-action="UpdateUser" method="post" class="p-4 border rounded bg-light shadow-sm">
 
             <div class="mb-3">
                 <label asp-for="UserName" class="form-label">User Name</label>
-                <input type="text" asp-for="UserName" class="form-control" />
+                <input type="text" asp-for="UserName" class="form-control" value="@currentUser.UserName"/>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
 
@@ -52,7 +53,11 @@
             </div>
 
             <div class="mb-3">
-                <button type="submit" id="btnCreate" class="btn btn-primary btn-lg">Create</button>
+                <input type="number" value="@currentUser.UserId" asp-for="UserId" class="form-control" readonly hidden />
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" id="btnUpdate" class="btn btn-primary btn-lg">Update</button>
             </div>
         </form>
 
@@ -63,7 +68,7 @@
     </div>
 
     <script>
-        $(document).on('click', '#btnCreate', function (event) {
+        $(document).on('click', '#btnUpdate', function (event) {
             if ($('#txtPassword').val() != $('#txtConfirmPassword').val()) {
                 event.preventDefault();
                 alert('Passwords do not match');

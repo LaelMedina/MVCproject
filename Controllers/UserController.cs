@@ -2,7 +2,9 @@
 using MVCproyect.Interfaces;
 using MVCproyect.Models;
 using MVCproyect.Repository;
+using MVCproyect.Services;
 using MySqlX.XDevAPI;
+using Newtonsoft.Json;
 
 namespace MVCproyect.Controllers
 {
@@ -78,10 +80,44 @@ namespace MVCproyect.Controllers
             return View("UserForm");
         }
 
-        //public async Task<IActionResult> Update() 
-        //{
-            
-        //}
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id)
+        {
+            try
+            {
+                User user = await _userRepository.GetUserByIdAsync(id);
+
+                ViewBag.currentUser = user;
+
+                ViewData["UserRoles"] = await _userService.GetUsersRolesAsync(); 
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("ErrorMessage");
+            }
+
+            return View("EditUserForm");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateUser(User updatedUser)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _userRepository.UpdateUserAsync(updatedUser);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = "An error has occurred: " + ex.Message + " Sale Id: " + updatedUser.UserId;
+                    return View("ErrorView");
+                }
+            }
+            return RedirectToAction("Index");
+        }
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
