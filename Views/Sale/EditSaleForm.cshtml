@@ -41,7 +41,7 @@
                         <div class="col-md-8 mb-4">
                             <label asp-for="SellerName" class="form-label font-weight-bold">Seller</label>
                             <select asp-for="SellerName" class="form-select" id="sellerSelect" aria-label="Select Seller">
-                                <option value="" disabled selected>Choose Seller...</option>
+                                <option value="@currentSale.SellerName" selected class="text-muted fst-italic">@currentSale.SellerName</option>
                                 @foreach (Seller seller in sellers)
                                 {
                                     <option value="@seller.Name" data-id="@seller.Id">@seller.Name</option>
@@ -173,19 +173,19 @@
             }
 
             $('#addToCart').on('click', function () {
-                let productId = $('#saleContent option:selected').val();
-                let productName = $('#saleContent option:selected').text();
-                let price = parseFloat($('#saleContent option:selected').data('price')) || 0;
-                let units = parseInt($('#totalUnits').val()) || 0;
+                let ProductId = parseInt($('#saleContent option:selected').val());
+                let ProductName = $('#saleContent option:selected').text();
+                let Price = parseFloat($('#saleContent option:selected').data('price')) || 0;
+                let Units = parseInt($('#totalUnits').val()) || 0;
 
-                if (productName && units > 0) {
-                    const item = { productId, productName, price, units };
+                if (ProductName && Units > 0) {
+                    const item = { ProductId, ProductName, Price, Units };
                     cart.push(item);
 
                     $('#cartItems').append(
-                        `<li class="list-group-item d-flex justify-content-between align-items-center" data-productid="${item.productId}">
-                            ${item.productName} - ${item.units} units x $${item.price.toFixed(2)}
-                            <span>$${(item.units * item.price).toFixed(2)}</span>
+                        `<li class="list-group-item d-flex justify-content-between align-items-center" data-productid="${item.ProductId}">
+                            ${item.ProductName} - ${item.Units} units x $${item.Price.toFixed(2)}
+                            <span>$${(item.Units * item.Price).toFixed(2)}</span>
                             <button class="btn btn-danger btn-sm remove-item">Remove</button>
                         </li>`
                     );
