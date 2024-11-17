@@ -33,14 +33,14 @@
                             <i class="fas fa-plus"></i> Insert Seller
                         </a>
 
-                        <form asp-action="Update" method="post" style="display:inline">
+                        <form asp-action="Update" method="post" id="btnEdit" style="display:inline">
                             <input type="hidden" name="id" id="editSellerId" value="" />
                             <button type="submit" class="btn btn-outline-success">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                         </form>
 
-                        <form asp-action="Delete" method="post" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this seller?');">
+                        <form asp-action="Delete" method="post" style="display:inline" id="btnDelete" onsubmit="return confirm('Are you sure you want to delete this seller?');">
                             <input type="hidden" name="id" id="deleteSellerId" value="" />
                             <button type="submit" class="btn btn-outline-danger">
                                 <i class="fas fa-trash-alt"></i> Delete
@@ -119,6 +119,26 @@
                     $('#editSellerId').val('');
                     $('#deleteSellerId').val('');
                 }
+            });
+
+            $('#btnDelete').on('click', function (e) {
+                var selectedCheckboxes = $('.select-seller:checked');
+
+                if (selectedCheckboxes.length === 0) {
+                    e.preventDefault();
+                    alert('Please select a seller to delete.');
+                }
+
+            });
+
+            $('#btnEdit').on('click', function (e) {
+                var selectedCheckboxes = $('.select-seller:checked');
+
+                if (selectedCheckboxes.length === 0) {
+                    e.preventDefault();
+                    alert('Please select a seller to Edit.');
+                }
+
             });
         });
 
