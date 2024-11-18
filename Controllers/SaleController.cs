@@ -26,11 +26,11 @@ namespace MVCproyect.Controllers
         private List<Currency> _currencies;
         private List<Seller> _sellers = new();
 
-        public SaleController(MySqlService context, SaleRepository saleRepository, UserRepository userRepository, SellerRepository sellerRepository)
+        public SaleController(MySqlService context, SaleRepository saleRepository, UserRepository userRepository, SellerRepository sellerRepository, ProductService productService)
         {
             _context = context;
             _idGeneratorService = new IdGeneratorService(_context);
-            _productService = new ProductService(_context);
+            _productService = productService;
             _saleService = new SaleService(_context);
             _saleRepository = saleRepository;
             _userRepository = userRepository;
@@ -99,7 +99,7 @@ namespace MVCproyect.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Sale newSale,[FromForm] string CartJson)
+        public async Task<ActionResult> Create(Sale newSale, [FromForm] string CartJson)
         {
             if (ModelState.IsValid)
             {
@@ -112,7 +112,27 @@ namespace MVCproyect.Controllers
 
                     foreach (var item in saleDetails)
                     {
-                        await _productService.UpdateStockAfterSale(item.ProductId, item.Units);
+                        try
+                        {
+                            await _productService.UpdateStockAfterSale(item.ProductId, item.Units);
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            // Deshacer la venta si no se puede completar
+                            await _saleRepository.DeleteSaleAsync(newSale.Id);
+
+                            ModelState.AddModelError(string.Empty, ex.Message);
+
+                            ViewData["Sellers"] = await _sellerRepository.GetSellersAsync();
+
+                            ViewData["products"] = await _productService.GetProductsAsync();
+
+                            ViewData["paymentMethods"] = await _saleService.GetPaymentMethodsAsync();
+
+                            ViewData["Currencies"] = await _saleService.GetCurrenciesAsync();
+
+                            return View("SaleForm", newSale);
+                        }
                     }
 
                     var document = _saleService.GenerateInvoiceSale(newSale);
@@ -125,7 +145,7 @@ namespace MVCproyect.Controllers
                     byte[] bytes = stream.ToArray();
                     stream.Close();
 
-                    return File(bytes, "appliccation/pdf", fileName);
+                    return File(bytes, "application/pdf", fileName);
                 }
                 catch (Exception ex)
                 {
@@ -196,7 +216,6 @@ namespace MVCproyect.Controllers
             }
             return RedirectToAction("Index");
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

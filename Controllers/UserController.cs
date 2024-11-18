@@ -94,7 +94,6 @@ namespace MVCproyect.Controllers
             return View("UserForm");
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Update(int id)
         {

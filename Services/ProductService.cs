@@ -10,11 +10,13 @@ namespace MVCproyect.Services
     {
 
         private readonly MySqlService _context;
+        private readonly ProductRepository _productRepository;
         private List<Product> _products;
 
-        public ProductService(MySqlService context)
+        public ProductService(MySqlService context, ProductRepository productRepository)
         {
             _context = context;
+            _productRepository = productRepository;
             _products = new List<Product>();
         }
 
@@ -30,7 +32,7 @@ namespace MVCproyect.Services
 
                 using MySqlCommand command = new MySqlCommand(query, connection);
 
-                using MySqlDataReader reader = (MySqlDataReader) await command.ExecuteReaderAsync();
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
                 {
@@ -58,24 +60,34 @@ namespace MVCproyect.Services
             try
             {
                 using MySqlConnection connection = _context.CreateConnection();
-
                 await connection.OpenAsync();
 
-                string query = "UPDATE products SET stock = (stock - @units) WHERE id = @ProductId";
+                // Verificar el stock actual
+                string checkStockQuery = "SELECT stock FROM products WHERE id = @ProductId";
+                using MySqlCommand checkStockCommand = new MySqlCommand(checkStockQuery, connection);
+                checkStockCommand.Parameters.AddWithValue("@ProductId", productId);
 
-                using MySqlCommand command = new MySqlCommand(query, connection);
+                int currentStock = Convert.ToInt32(await checkStockCommand.ExecuteScalarAsync());
 
-                command.Parameters.AddWithValue("@ProductId", productId);
+                if (currentStock < units)
+                {
+                    throw new InvalidOperationException($"Not enough stock for product {productId}. Available: {currentStock}, Requested: {units}");
+                }
 
-                command.Parameters.AddWithValue("@units", units);
+                // Actualizar el stock
+                string updateStockQuery = "UPDATE products SET stock = stock - @units WHERE id = @ProductId";
+                using MySqlCommand updateCommand = new MySqlCommand(updateStockQuery, connection);
+                updateCommand.Parameters.AddWithValue("@ProductId", productId);
+                updateCommand.Parameters.AddWithValue("@units", units);
 
-                await command.ExecuteNonQueryAsync();
-
+                await updateCommand.ExecuteNonQueryAsync();
             }
-            catch (Exception ex) 
-            { 
-                Console.WriteLine($"{ex.Message}"); 
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                throw;
             }
         }
     }
+
 }
