@@ -62,11 +62,25 @@ namespace MVCproyect.Controllers
             {
                 try
                 {
+                    // Verifica si el usuario ya existe
+                    User userTest = await _userService.GetUserByNameAsync(newUser.UserName);
+                    if (userTest.UserName == newUser.UserName)
+                    {
+                        throw new InvalidOperationException($"The username '{newUser.UserName}' is already taken.");
+                    }
+
+                    // Si no existe, agrega el nuevo usuario
                     await _userRepository.AddUserAsync(newUser);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    ViewData["UserRoles"] = await _userService.GetUsersRolesAsync();
+                    return View("UserForm", newUser);
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.ErrorMessage = "An error has occured: " + ex.Message.ToString() + "Product Id: " + newUser.UserId;
+                    ViewBag.ErrorMessage = $"An unexpected error occurred: {ex.Message}";
                     return View("ErrorView");
                 }
             }
@@ -108,11 +122,24 @@ namespace MVCproyect.Controllers
             {
                 try
                 {
+                    // Verifica si el usuario ya existe
+                    User userTest = await _userService.GetUserByNameAsync(updatedUser.UserName);
+                    if (userTest.UserName == updatedUser.UserName)
+                    {
+                        throw new InvalidOperationException($"The username '{updatedUser.UserName}' is already taken.");
+                    }
+
                     await _userRepository.UpdateUserAsync(updatedUser);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    ViewData["UserRoles"] = await _userService.GetUsersRolesAsync();
+                    return View("UserForm", updatedUser);
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.ErrorMessage = "An error has occurred: " + ex.Message + " Sale Id: " + updatedUser.UserId;
+                    ViewBag.ErrorMessage = "An error has occurred: " + ex.Message + " User Id: " + updatedUser.UserId;
                     return View("ErrorView");
                 }
             }
