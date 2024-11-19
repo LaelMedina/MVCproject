@@ -10,27 +10,36 @@ namespace MVCproyect.Services
 
         private readonly string? _connectionString;
         private string _lastPath;
-        public MySqlService(IConfiguration configuration)
+        private readonly string _backupDirectory;
+
+        public MySqlService(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _backupDirectory = Path.Combine(environment.ContentRootPath, "dbfile");
+
+            if (!Directory.Exists(_backupDirectory))
+            {
+                Directory.CreateDirectory(_backupDirectory); 
+            }
         }
+
 
         public MySqlConnection CreateConnection()
         {
             return new MySqlConnection(_connectionString);
         }
 
-        public void DataBaseBackUp() 
+        public void DataBaseBackUp()
         {
             string fileName = $"productsdb_backup_{DateTime.Now:yyyyMMdd_HHmmss}.sql";
-            string _path = "C:\\Users\\Usuario\\OneDrive\\Documentos\\Coding\\MVCproject\\dbfile\\" + fileName;
+            string _path = Path.Combine(_backupDirectory, fileName);
             _lastPath = _path;
 
-            using (MySqlConnection connection = new MySqlConnection(_connectionString)) 
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                using (MySqlCommand command = new MySqlCommand()) 
+                using (MySqlCommand command = new MySqlCommand())
                 {
-                    using (MySqlBackup backup = new MySqlBackup(command)) 
+                    using (MySqlBackup backup = new MySqlBackup(command))
                     {
                         command.Connection = connection;
 
@@ -38,16 +47,16 @@ namespace MVCproyect.Services
 
                         backup.ExportToFile(_path);
 
-                        connection.Close(); 
+                        connection.Close();
                     }
                 }
             }
-
         }
+
 
         public void RestoreDataBase()
         {
-            if (!File.Exists(_lastPath))
+            if (string.IsNullOrEmpty(_lastPath) || !File.Exists(_lastPath))
             {
                 throw new FileNotFoundException("Backup file not found.", _lastPath);
             }
@@ -69,6 +78,7 @@ namespace MVCproyect.Services
                 }
             }
         }
+
 
 
     }
