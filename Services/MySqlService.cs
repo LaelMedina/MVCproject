@@ -9,7 +9,7 @@ namespace MVCproyect.Services
     {
 
         private readonly string? _connectionString;
-        private string _lastPath;
+        private string? _lastPath;
         private readonly string _backupDirectory;
 
         public MySqlService(IConfiguration configuration, IWebHostEnvironment environment)
