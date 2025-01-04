@@ -22,7 +22,7 @@ namespace MVCproyect.Controllers
         private readonly SaleRepository _saleRepository;
         private readonly UserRepository _userRepository;
         private readonly SellerRepository _sellerRepository;
-        private List<Sale> _sales;
+        private List<Sale> _sales = new List<Sale>();
         private List<Currency> _currencies;
         private List<Seller> _sellers = new();
 
@@ -34,7 +34,6 @@ namespace MVCproyect.Controllers
             _saleService = new SaleService(_context);
             _saleRepository = saleRepository;
             _userRepository = userRepository;
-            _sales = new List<Sale>();
             _currencies = new List<Currency>();
             _sellerRepository = sellerRepository;
         }
