@@ -136,6 +136,7 @@ namespace MVCproyect.Controllers
 
                     var document = _saleService.GenerateInvoiceSale(newSale);
 
+                    // Guardar el documento en un MemoryStream
                     MemoryStream stream = new MemoryStream();
                     document.Save(stream);
                     string fileName = "Invoice_" + newSale.Id + ".pdf";
